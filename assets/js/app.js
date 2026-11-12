@@ -220,8 +220,8 @@
   var start = (location.hash || '#home').slice(1);
   render(C.verses[start] ? start : 'home');
   SC_GLOBE.mountAll();
+  var regionTouched = false;
   showRegion(SC_GEO.get().key);
   SC_GEO.onChange(function (v) { if (!regionTouched) showRegion(v.key); });
-  var regionTouched = false;
   $('#region-pills').addEventListener('click', function () { regionTouched = true; });
 })();
