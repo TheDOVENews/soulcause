@@ -219,7 +219,7 @@ function viewModule(mod) {
     const by = {}; list.forEach((r) => { (by[r.due_date || 'No date'] = by[r.due_date || 'No date'] || []).push(r); });
     body = Object.keys(by).sort().map((d) => `<div class="day"><h4>${d === 'No date' ? 'NO DATE' : esc(dt(d).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })).toUpperCase()}</h4><div class="rows">${by[d].map(row).join('')}</div></div>`).join('');
   } else body = `<div class="rows">${list.map(row).join('')}</div>`;
-  return `<div class="summary">${summary}</div>${extra}${tools}${body}${mod === 'person' || mod === 'legal' || mod === 'finance' ? '<p class="fine">Owner and admin only. OUTWARD helps you keep track; it isn’t legal, tax or HR advice. Confirm requirements with a qualified professional.</p>' : ''}`;
+  return `<div class="summary">${summary}</div>${extra}${tools}${body}${mod === 'person' || mod === 'legal' || mod === 'finance' ? '<p class="fine">Owner and admin only. OUTWARD helps you keep track; it isn’t legal, tax or HR advice. Confirm requirements with a qualified professional. <a href="/legal#disclosures" target="_blank" rel="noopener">Disclosures</a></p>' : ''}`;
 }
 function row(r) {
   const m = M[r.module], d = days(r.due_date), dd = r.details || {};
@@ -369,7 +369,7 @@ function owlContext() {
 }
 function paintOwl() {
   const log = $('#owl-log');
-  log.innerHTML = (S.owl.length ? S.owl : [{ role: 'assistant', content: `Hello${S.me?.name ? ', ' + S.me.name.split(' ')[0] : ''}. I’m OWL. Ask me what needs attention, or for a summary, checklist or draft.` }])
+  log.innerHTML = (S.owl.length ? S.owl : [{ role: 'assistant', content: `Hello${S.me?.name ? ', ' + S.me.name.split(' ')[0] : ''}. I’m OWL. Ask me what needs attention, or for a summary, checklist or draft. I\u2019m an AI guide, not a lawyer, accountant or HR professional, so check important answers with one.` }])
     .map((m) => `<div class="msg ${m.role === 'user' ? 'u' : 'a'}">${esc(m.content)}</div>`).join('');
   log.scrollTop = log.scrollHeight;
   $('#owl-chips').innerHTML = S.owl.length ? '' : CHIPS.map((c) => `<button type="button">${esc(c)}</button>`).join('');
