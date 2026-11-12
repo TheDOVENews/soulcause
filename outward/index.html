@@ -34,7 +34,16 @@
     <p class="err" role="alert" hidden></p>
     <button class="btn dark" type="submit">Sign in</button>
     <button class="link" type="button" id="reset-link">Forgot password?</button>
+    <button class="link" type="button" id="request-link">New here? Request access</button>
     <p class="fine">Only invited SoulCause staff can sign in. OUTWARD and OWL are organizational aids, not legal, tax, financial or HR advice. <a href="/legal#disclosures" target="_blank" rel="noopener">Disclosures</a> · <a href="/legal#terms" target="_blank" rel="noopener">Terms</a> · <a href="/legal#privacy" target="_blank" rel="noopener">Privacy</a></p>
+  </form>
+  <form id="request-form" class="card" novalidate hidden>
+    <h1>Request access</h1>
+    <label>Your name<input name="name" autocomplete="name" maxlength="120" required></label>
+    <label>Work email<input name="email" type="email" autocomplete="email" required></label>
+    <p class="err" role="alert" hidden></p>
+    <button class="btn dark" type="submit">Send request</button>
+    <p class="fine">The owner approves every request before you can see anything.</p>
   </form>
 </section>
 

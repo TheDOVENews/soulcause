@@ -2,6 +2,7 @@
    Sign-in and data through Supabase (publishable key is public by design; the database
    rules decide what each role may see). OWL answers through /api/owl. */
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createAccounting } from './accounting.js';
 
 const SUPABASE_URL = 'https://orhmsmxnfokupmtctueu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_eI838082EIyT7JVnvKIllQ_v3cRZQZL';
@@ -45,6 +46,8 @@ const staffName = (e) => { const s = S.staff.find((x) => x.email === e); return 
 const recs = (mod) => S.records.filter((r) => r.module === mod);
 const open = (r) => !DONE.includes(r.status);
 const riskScore = (r) => (Number(r.details?.likelihood) || 0) * (Number(r.details?.impact) || 0);
+const ACCT = createAccounting({ sb, esc, money, rerender: () => render(), token: async () => (await sb.auth.getSession()).data?.session?.access_token || '' });
+const isAcct = (v) => Object.prototype.hasOwnProperty.call(ACCT.VIEWS, v);
 
 /* ---------- mirrored mark ---------- */
 function paintAcro() {
@@ -80,6 +83,14 @@ $('#reset-link').addEventListener('click', async () => {
   await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/outward/' });
   err.textContent = 'If that email belongs to SoulCause staff, a reset link is on its way.'; err.hidden = false;
 });
+$('#request-link').addEventListener('click', () => { $('#request-form').hidden = false; $('#request-form').elements.name.focus(); });
+$('#request-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target, msg = $('.err', f), email = f.elements.email.value.trim().toLowerCase(), name = f.elements.name.value.trim();
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = 'Please enter your name and a valid email.'; msg.hidden = false; return; }
+  await sb.from('outward_staff').insert({ email, name: name.slice(0, 120), role: 'staff', active: false });
+  msg.textContent = 'Request sent. The owner will review it and let you know.'; msg.hidden = false; f.reset();
+});
 $('#signout').addEventListener('click', async () => { await sb.auth.signOut(); showSignIn(); });
 
 async function enter() {
@@ -88,7 +99,7 @@ async function enter() {
   const { data: staff } = await sb.from('outward_staff').select('email,name,role,active').order('name');
   S.staff = staff || [];
   S.me = S.staff.find((s) => s.email === email && s.active);
-  if (!S.me) { await sb.auth.signOut(); return showSignIn('This account isn’t on the SoulCause team yet. Ask the owner to add you.'); }
+  if (!S.me) { await sb.auth.signOut(); return showSignIn('This account isn’t approved yet. Use Request access below, or ask the owner to approve you.'); }
   $('#signin').hidden = true; $('#app').hidden = false;
   $('#who').textContent = `${S.me.name || S.me.email} · ${S.me.role}`;
   await load();
@@ -100,6 +111,7 @@ async function load() {
     sb.from('outward_activity').select('*').order('at', { ascending: false }).limit(15)
   ]);
   S.records = r.data || []; S.activity = a.data || [];
+  if (isAdmin()) await ACCT.load();
   if (isAdmin()) { const v = await sb.from('visitors').select('*').order('created_at', { ascending: false }).limit(200); S.visitors = v.data || []; }
 }
 
@@ -128,15 +140,16 @@ function alerts() {
 const NAV = [['Command', [['command', 'Command center', '#0B0B0C'], ['alerts', 'Alerts', '#F2711C']]],
   ['Operations', [['task', 'Tasks', M.task.color], ['event', 'Schedule', M.event.color]]],
   ['Compliance', [['person', 'People', M.person.color], ['legal', 'Legal', M.legal.color], ['risk', 'Risk (ERM)', '#555']]],
-  ['Reporting', [['finance', 'Finance', M.finance.color], ['marketing', 'Marketing', M.marketing.color], ['visitors', 'Visitors & prayer', '#B9A6F0']]],
+  ['Accounting', [['acct', 'Overview', '#1E9E5A'], ['acct-coa', 'Chart of accounts', '#1E9E5A'], ['acct-tx', 'Transactions', '#1E9E5A'], ['acct-sources', 'Bank & cards', '#1E9E5A'], ['acct-docs', 'Statements', '#1E9E5A'], ['acct-reports', 'Reports', '#1E9E5A']]],
+  ['Reporting', [['marketing', 'Marketing', M.marketing.color], ['visitors', 'Visitors & prayer', '#B9A6F0'], ['finance', 'Budget items', M.finance.color]]],
   ['Admin', [['team', 'Team', '#fff']]]];
 function paintNav() {
   const a = alerts();
   $('#nav').innerHTML = NAV.map(([g, items]) => {
-    const vis = items.filter(([k]) => (M[k] ? canSee(k) : k === 'team' ? S.me.role === 'owner' : k === 'visitors' ? isAdmin() : true));
+    const vis = items.filter(([k]) => (M[k] ? canSee(k) : k === 'team' ? S.me.role === 'owner' : (k === 'visitors' || isAcct(k)) ? isAdmin() : true));
     if (!vis.length) return '';
     return `<p class="grp">${g.toUpperCase()}</p>` + vis.map(([k, label, c]) => {
-      const n = k === 'alerts' ? a.length : M[k] ? a.filter((x) => x.r && x.r.module === k).length : 0;
+      const n = k === 'alerts' ? a.length : k === 'acct-tx' ? ACCT.reviewCount() : k === 'team' ? S.staff.filter((x) => !x.active).length : M[k] ? a.filter((x) => x.r && x.r.module === k).length : 0;
       return `<button data-view="${k}" ${S.view === k ? 'aria-current="page"' : ''}><i style="background:${c}"></i>${label}${n ? `<span class="n">${n}</span>` : ''}</button>`;
     }).join('');
   }).join('');
@@ -149,8 +162,8 @@ window.addEventListener('hashchange', () => { const v = location.hash.slice(1); 
 function go(view) {
   if (M[view] && !canSee(view)) view = 'command';
   if (view === 'team' && S.me.role !== 'owner') view = 'command';
-  if (view === 'visitors' && !isAdmin()) view = 'command';
-  if (!M[view] && !['command', 'alerts', 'team', 'visitors'].includes(view)) view = 'command';
+  if ((view === 'visitors' || isAcct(view)) && !isAdmin()) view = 'command';
+  if (!M[view] && !isAcct(view) && !['command', 'alerts', 'team', 'visitors'].includes(view)) view = 'command';
   S.view = view; S.q = ''; S.filter = '';
   if (location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
   render();
@@ -158,6 +171,13 @@ function go(view) {
 function render() {
   paintNav();
   const v = S.view, mod = M[v];
+  if (isAcct(v)) {
+    $('#view-kicker').textContent = 'COR \u00b7 Reporting \u00b7 Accounting';
+    $('#view-title').textContent = ACCT.VIEWS[v];
+    $('#add-btn').hidden = true;
+    ACCT.render(v, $('#view'));
+    return;
+  }
   $('#view-kicker').textContent = mod ? `COR · ${mod.group}` : v === 'command' ? 'COR · Compliance · Operations · Reporting' : v === 'team' ? 'Admin' : v === 'visitors' ? 'Reporting' : 'Notifications';
   $('#view-title').textContent = mod ? mod.label : { command: 'Command center', alerts: 'Alerts', team: 'Team', visitors: 'Visitors & prayer' }[v];
   const add = $('#add-btn'); add.hidden = !(mod || v === 'team'); add.textContent = v === 'team' ? '+ Add person to team' : `+ Add ${mod ? mod.noun : ''}`;
@@ -186,7 +206,8 @@ function viewCommand() {
   const inMonth = fin.filter((r) => (r.due_date || '').startsWith(ym));
   const income = inMonth.filter((r) => ['income', 'donation'].includes(r.details?.kind)).reduce((s, r) => s + Number(r.amount || 0), 0);
   const spent = inMonth.filter((r) => r.details?.kind === 'expense').reduce((s, r) => s + Number(r.amount || 0), 0);
-  const repExtra = isAdmin() ? `<ul><li>This month in: <b>${money(income)}</b></li><li>This month out: <b>${money(spent)}</b></li><li>Live campaigns: <b>${recs('marketing').filter((r) => r.status === 'live').length}</b></li></ul>` : `<ul><li>Live campaigns: <b>${recs('marketing').filter((r) => r.status === 'live').length}</b></li></ul>`;
+  const mo = isAdmin() && ACCT.isLoaded() ? ACCT.month() : { income, expense: spent };
+  const repExtra = isAdmin() ? `<ul><li>This month in: <b>${money(mo.income)}</b></li><li>This month out: <b>${money(mo.expense)}</b></li><li>To review: <b>${ACCT.reviewCount()}</b></li><li>Live campaigns: <b>${recs('marketing').filter((r) => r.status === 'live').length}</b></li></ul>` : `<ul><li>Live campaigns: <b>${recs('marketing').filter((r) => r.status === 'live').length}</b></li></ul>`;
   const week = recs('event').filter((r) => { const d = days(r.due_date); return d != null && d >= 0 && d <= 7 && open(r); });
   const opsExtra = `<ul><li>Events this week: <b>${week.length}</b></li><li>Blocked tasks: <b>${recs('task').filter((r) => r.status === 'blocked').length}</b></li></ul>`;
   const a = alerts().slice(0, 8);
@@ -248,7 +269,8 @@ function heatmap() {
   return h + '</div>';
 }
 function viewTeam() {
-  return `<div class="table-wrap"><table><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>STATUS</th><th></th></tr>${S.staff.map((s) => `<tr><td>${esc(s.name || '')}</td><td>${esc(s.email)}</td><td>${esc(s.role)}</td><td>${s.active ? 'active' : 'removed'}</td><td>${s.email === S.me.email ? '' : `<button class="link" data-staff="${esc(s.email)}">Edit</button>`}</td></tr>`).join('')}</table></div>
+  const pend = S.staff.filter((s) => !s.active);
+  return `${pend.length ? `<section class="sec"><h3>Waiting for approval</h3><div class="rows">${pend.map((s) => `<div class="row" style="cursor:default"><span class="bar" style="background:#F2711C"></span><span><span class="t">${esc(s.name || s.email)}</span><span class="m"><span>${esc(s.email)}</span><span>asked for ${esc(s.role)} access</span></span></span><span class="r"><button class="btn dark" data-approve-staff="${esc(s.email)}">Approve</button><button class="link" data-staff="${esc(s.email)}">Edit role</button></span></div>`).join('')}</div><p class="fine">Approving gives the role shown. They also need a sign-in: Supabase \u2192 Authentication \u2192 Users \u2192 Add user with the same email.</p></section>` : ''}<div class="table-wrap"><table><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>STATUS</th><th></th></tr>${S.staff.map((s) => `<tr><td>${esc(s.name || '')}</td><td>${esc(s.email)}</td><td>${esc(s.role)}</td><td>${s.active ? 'active' : 'removed'}</td><td>${s.email === S.me.email ? '' : `<button class="link" data-staff="${esc(s.email)}">Edit</button>`}</td></tr>`).join('')}</table></div>
   <p class="fine">Adding someone here gives them a role. They also need a sign-in: in Supabase, open Authentication → Users → Add user with the same email. Owners see everything; admins see everything except this Team page; staff see Tasks, Schedule, Risk and Marketing only.</p>`;
 }
 function viewVisitors() {
@@ -258,6 +280,9 @@ function viewVisitors() {
 
 /* ---------- view events ---------- */
 $('#view').addEventListener('click', async (e) => {
+  if (isAcct(S.view)) { const r = await ACCT.onClick(e); if (typeof r === 'string') return go(r); if (r) return; }
+  const ap = e.target.closest('[data-approve-staff]');
+  if (ap) { await sb.from('outward_staff').update({ active: true }).eq('email', ap.dataset.approveStaff); const { data } = await sb.from('outward_staff').select('email,name,role,active').order('name'); S.staff = data || []; return render(); }
   const o = e.target.closest('[data-open]'); if (o) return edit(S.records.find((r) => r.id === o.dataset.open));
   const g = e.target.closest('[data-view-go]'); if (g) return go(g.dataset.viewGo);
   const st = e.target.closest('[data-staff]'); if (st) return editStaff(S.staff.find((s) => s.email === st.dataset.staff));
@@ -265,9 +290,10 @@ $('#view').addEventListener('click', async (e) => {
   if (f) { await sb.from('visitors').update({ followed_up_at: new Date().toISOString() }).eq('id', f.dataset.follow); await load(); render(); }
 });
 $('#view').addEventListener('input', (e) => {
+  if (isAcct(S.view) && ACCT.onInput(e)) { clearTimeout(window.__acctQ); window.__acctQ = setTimeout(() => { const pos = e.target.selectionStart; render(); const i = $('[data-f="q"]'); if (i) { i.focus(); i.setSelectionRange(pos, pos); } }, 250); return; }
   if (e.target.matches('[data-q]')) { S.q = e.target.value; const pos = e.target.selectionStart; render(); const i = $('[data-q]'); i.focus(); i.setSelectionRange(pos, pos); }
 });
-$('#view').addEventListener('change', (e) => { if (e.target.matches('[data-filter]')) { S.filter = e.target.value; render(); } });
+$('#view').addEventListener('change', async (e) => { if (isAcct(S.view) && await ACCT.onChange(e)) return; if (e.target.matches('[data-filter]')) { S.filter = e.target.value; render(); } });
 $('#add-btn').addEventListener('click', () => (S.view === 'team' ? editStaff(null) : edit(null)));
 
 /* ---------- editor ---------- */
@@ -365,6 +391,7 @@ function owlContext() {
     });
   });
   const a = alerts(); if (a.length) { lines.push('## Alerts'); a.forEach((x) => lines.push(`- ${x.t} (${x.s}, ${x.when})`)); }
+  if (isAdmin()) lines.push(ACCT.context());
   return lines.join('\n') || 'No records yet.';
 }
 function paintOwl() {

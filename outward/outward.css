@@ -144,3 +144,14 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;p
   .row .r{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between;text-align:left}
   .ed-body .two{grid-template-columns:1fr}
 }
+
+/* accounting */
+.bars{display:flex;flex-direction:column;gap:10px;max-width:720px}
+.barrow{display:grid;grid-template-columns:minmax(120px,220px) 1fr auto;gap:12px;align-items:center;font-size:14px}
+.barrow .track{height:14px;border:2px solid var(--ink);border-radius:7px;overflow:hidden}.barrow .track div{height:100%;background:var(--green)}
+.tile-note{border:2px dashed var(--ink);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;max-width:720px;line-height:1.5}
+.btn.sm{min-height:34px;padding:0 10px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+table.tx select{min-height:36px;padding:4px 8px;font-size:13px;max-width:220px}
+@media (max-width:820px){.barrow{grid-template-columns:1fr auto}.barrow .track{grid-column:1/-1;order:3}}
+@media print{.side,.top,.no-print,.owl,#owl-open{display:none!important}.view{padding:0}.table-wrap{border:0}}

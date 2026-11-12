@@ -57,5 +57,13 @@
       "destination": "/legal#disclosures",
       "permanent": false
     }
-  ]
+  ],
+  "functions": {
+    "api/statement-extract.mjs": {
+      "maxDuration": 60
+    },
+    "api/owl.mjs": {
+      "maxDuration": 30
+    }
+  }
 }
