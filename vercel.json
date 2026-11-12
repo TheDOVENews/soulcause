@@ -40,5 +40,22 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/terms",
+      "destination": "/legal#terms",
+      "permanent": false
+    },
+    {
+      "source": "/privacy",
+      "destination": "/legal#privacy",
+      "permanent": false
+    },
+    {
+      "source": "/disclosures",
+      "destination": "/legal#disclosures",
+      "permanent": false
+    }
   ]
 }
