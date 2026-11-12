@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B0B0C">
+<title>OUTWARD — SoulCause back office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/outward/outward.css">
+</head>
+<body>
+
+<!-- SIGN IN -->
+<section id="signin" class="signin" hidden>
+  <div class="mark-block">
+    <div class="mirror" aria-label="OUTWARD">
+      <span class="word">OUTWARD</span>
+      <span class="word reflect" aria-hidden="true">OUTWARD</span>
+    </div>
+    <div class="acro-pair" aria-label="What OUTWARD stands for">
+      <ol class="values"></ol>
+      <ol class="letters" aria-hidden="true"></ol>
+      <ol class="functions"></ol>
+    </div>
+    <p class="tag">Inward character. Outward work. Compliance, Operations and Reporting for SoulCause.</p>
+  </div>
+  <form id="signin-form" class="card" novalidate>
+    <h1>Sign in</h1>
+    <label>Email<input name="email" type="email" autocomplete="username" required></label>
+    <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+    <p class="err" role="alert" hidden></p>
+    <button class="btn dark" type="submit">Sign in</button>
+    <button class="link" type="button" id="reset-link">Forgot password?</button>
+    <p class="fine">Only invited SoulCause staff can sign in.</p>
+  </form>
+</section>
+
+<!-- APP -->
+<div id="app" class="app" hidden>
+  <aside class="side">
+    <div class="side-head">
+      <div class="mirror small"><span class="word">OUTWARD</span><span class="word reflect" aria-hidden="true">OUTWARD</span></div>
+    </div>
+    <nav id="nav" aria-label="Outward areas"></nav>
+    <div class="side-foot">
+      <p class="who" id="who"></p>
+      <button class="link light" id="signout">Sign out</button>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="mono" id="view-kicker"></p>
+        <h2 id="view-title"></h2>
+      </div>
+      <div class="top-actions">
+        <button class="bell" id="bell" aria-label="Alerts"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><b id="bell-count" hidden></b></button>
+        <button class="btn sun" id="owl-open">Ask OWL</button>
+        <button class="btn dark" id="add-btn" hidden>+ Add</button>
+      </div>
+    </header>
+    <div id="view" class="view" aria-live="polite"></div>
+  </main>
+</div>
+
+<!-- EDIT DIALOG -->
+<dialog id="editor" class="editor" aria-labelledby="ed-title">
+  <form method="dialog" id="ed-form">
+    <div class="ed-head"><h3 id="ed-title"></h3><button class="x" value="cancel" formnovalidate aria-label="Close">×</button></div>
+    <div class="ed-body" id="ed-body"></div>
+    <p class="err" role="alert" hidden></p>
+    <div class="ed-foot">
+      <button class="link danger" type="button" id="ed-delete" hidden>Delete</button>
+      <span></span>
+      <button class="btn ghost" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn dark" type="submit" value="save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- OWL -->
+<aside id="owl" class="owl" hidden aria-label="OWL assistant">
+  <div class="owl-head"><div><b>OWL</b><small>Omnichannel Wisdom Language</small></div><button class="x light" id="owl-close" aria-label="Close OWL">×</button></div>
+  <div class="owl-log" id="owl-log"></div>
+  <div class="owl-chips" id="owl-chips"></div>
+  <form class="owl-form" id="owl-form"><textarea name="q" rows="2" placeholder="Ask about your tasks, people, budgets, risks…" aria-label="Ask OWL"></textarea><button class="btn sun" type="submit">Send</button></form>
+</aside>
+
+<script type="module" src="/outward/outward.js"></script>
+</body>
+</html>

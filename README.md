@@ -40,3 +40,15 @@ A static site (HTML, CSS, vanilla JavaScript) with two small Vercel functions an
 - Point soulcause.com at Vercel in GoDaddy DNS.
 
 Deploys automatically from `main` to soulcause.com.
+
+## OUTWARD (back office) — soulcause.com/outward
+
+OUTWARD runs COR (Compliance, Operations and Reporting): command center, alerts, tasks, schedule,
+people with onboarding and termination checklists, finance, legal, marketing, risk (ERM), visitors
+and prayer follow-up, team roles, and OWL (Omnichannel Wisdom Language) through Vercel AI Gateway.
+
+- Lock: `middleware.js`. Only the SHA-256 of the lock password is stored, in the Vercel setting `OUTWARD_PASS_SHA256`.
+- Sign-in: Supabase Auth. Roles live in `outward_staff`; run `supabase/migrations/002_outward.sql` once.
+- Give someone a role (SQL editor): `select public.outward_grant('name@example.com', 'staff', 'Full Name');`
+- People, Finance and Legal are owner and admin only. Staff see Tasks, Schedule, Risk and Marketing.
+- OWL model: `OUTWARD_OWL_MODEL` (default `openai/gpt-4.1-mini`).
