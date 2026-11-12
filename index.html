@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SoulCause — Back to the roots. Back to the Great Commission.</title>
+<meta name="description" content="SoulCause helps churches return to the Great Commission by equipping the few, sending the many and multiplying disciples to the world.">
+<meta name="theme-color" content="#0B0B0C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<!-- WELCOME FLOW -->
+<div id="welcome" class="welcome" aria-live="polite">
+  <div class="wallpaper" aria-hidden="true"><svg width="100%" height="100%"><defs>
+    <pattern id="scWall" width="240" height="240" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#DCD7EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30 12v36M18 24h24"/>
+        <path d="M84 30c8-10 22-10 30 0c-8 10-22 10-30 0zM114 30l8-6M114 30l8 6"/>
+        <path d="M166 36c6 0 10-4 12-12c3 6 8 8 15 7c-3 7-9 10-17 10l-7 6zM178 24c2-5 6-7 11-7"/>
+        <path d="M30 126c-12-8-16-14-16-20a8 8 0 0 1 16-2a8 8 0 0 1 16 2c0 6-4 12-16 20z"/>
+        <path d="M84 102c6-2 12-2 16 2c4-4 10-4 16-2v20c-6-2-12-2-16 2c-4-4-10-4-16-2zM100 104v20"/>
+        <circle cx="176" cy="106" r="4"/><circle cx="185" cy="106" r="4"/><circle cx="180.5" cy="114" r="4"/><circle cx="171.5" cy="114" r="4"/><circle cx="189.5" cy="114" r="4"/><circle cx="176" cy="122" r="4"/><circle cx="185" cy="122" r="4"/><circle cx="180.5" cy="130" r="4"/>
+        <path d="M180.5 102v-6M180.5 98c3-4 8-5 12-3"/>
+        <path d="M30 214V180M30 188l-6-5M30 188l6-5M30 196l-6-5M30 196l6-5M30 204l-6-5M30 204l6-5"/>
+        <path d="M86 200h24c-2 6-6 8-12 8s-10-2-12-8zM110 200l6-4M98 196c3-3 3-7 0-11c-3 4-3 8 0 11z"/>
+        <path d="M180 214v-16M180 200c-7 0-11-4-11-11c7 0 11 4 11 11zM180 198c0-7 4-11 11-11c0 7-4 11-11 11z"/>
+        <ellipse cx="134" cy="160" rx="3.5" ry="6.5"/><ellipse cx="146" cy="150" rx="3.5" ry="6.5"/>
+        <path d="M140 64v10M135 69h10M226 70v8M222 74h8M64 154v8M60 158h8M222 158v8M218 162h8"/>
+      </g></pattern></defs><rect width="100%" height="100%" fill="url(#scWall)"/></svg></div>
+
+  <div class="w-exit">
+    <button type="button" class="link-btn" data-action="been-here">I’ve been here before</button>
+    <button type="button" class="link-btn" data-action="skip-all">Skip</button>
+  </div>
+  <section class="w-stage" data-stage="welcome">
+    <div class="rise r0" data-globe="230" data-spin="18"></div>
+    <p class="rise r1 mono w-place">WELCOME, FRIEND FROM <span data-visitor-place>AROUND THE WORLD</span></p>
+    <p class="rise r1 wordmark xl">Soul<span>Cause</span></p>
+    <p class="rise r2 w-lead">Welcome. You are invited back to the roots, back to the Great Commission.</p>
+    <button class="btn btn-dark btn-lg rise r3" data-action="to-form">Enter →</button>
+  </section>
+
+  <section class="w-stage w-modal" data-stage="form" hidden>
+    <form class="card-modal rise r0" id="visitor-form" novalidate aria-labelledby="q-title">
+      <div class="modal-head lav">
+        <div class="row-between"><p class="mono small">LET US PRAY FOR YOU</p><p class="mono small" id="q-count"></p></div>
+        <div class="dots" id="q-dots" aria-hidden="true"></div>
+      </div>
+      <div class="modal-body q-body">
+        <div class="q" data-q="name">
+          <h2 id="q-title" class="q-title">First, what should we call you?</h2>
+          <input name="first_name" type="text" autocomplete="given-name" maxlength="80" aria-label="First name" placeholder="First name">
+        </div>
+        <div class="q" data-q="role" hidden>
+          <h2 class="q-title">Which best describes you?</h2>
+          <div class="pills stack-pills">
+            <button type="button" class="pill" data-role="pastor" aria-pressed="false">Pastor or leader</button>
+            <button type="button" class="pill" data-role="member" aria-pressed="false">Church member</button>
+            <button type="button" class="pill" data-role="ministry" aria-pressed="false">Ministry or organization</button>
+            <button type="button" class="pill" data-role="exploring" aria-pressed="false">Just exploring</button>
+          </div>
+        </div>
+        <div class="q" data-q="church" hidden>
+          <h2 class="q-title">Where do you worship or serve?</h2>
+          <input name="church" type="text" autocomplete="organization" maxlength="200" aria-label="Church or organization" placeholder="Church or organization">
+        </div>
+        <div class="q" data-q="need" hidden>
+          <h2 class="q-title">How can we pray for you today?</h2>
+          <textarea name="prayer_request" rows="4" maxlength="2000" aria-label="Prayer request" placeholder="Share as much or as little as you like"></textarea>
+        </div>
+        <div class="q" data-q="email" hidden>
+          <h2 class="q-title">Where can we send encouragement?</h2>
+          <input name="email" type="email" autocomplete="email" maxlength="200" aria-label="Email" placeholder="you@example.com">
+          <label class="check"><input name="wants_updates" type="checkbox" checked> Send me SoulCause updates</label>
+          <p class="fine">What you share stays with SoulCause. We never sell it.</p>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+        <div class="row-between">
+          <button type="button" class="link-btn" data-action="back">← Back</button>
+          <div class="row-wrap"><button type="button" class="link-btn" data-action="next-skip">Skip question</button><button type="submit" class="btn btn-dark" id="q-next">Next →</button></div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="w-stage w-modal" data-stage="prayer" hidden>
+    <div class="card-modal wide rise r0">
+      <div class="modal-head black"><p class="mono small lav-ink">A PRAYER FOR YOU</p><h2 id="prayer-title">We are praying for you.</h2></div>
+      <div class="modal-body prayer" id="prayer-body"></div>
+      <div class="modal-body">
+        <div class="row-wrap">
+          <button class="btn btn-dark" data-go="home">Enter SoulCause →</button>
+          <button class="btn btn-sun" data-go="field">Sign in to FIELD</button>
+        </div>
+        <div class="row-wrap">
+          <button class="chip-btn" data-go="send"><i style="background:#1F4FD8"></i>SEND</button>
+          <button class="chip-btn" data-go="labor"><i style="background:#F2711C"></i>LABOR</button>
+          <button class="chip-btn" data-go="reach"><i style="background:#1E9E5A"></i>REACH</button>
+          <button class="chip-btn" data-go="net"><i style="background:#B9A6F0"></i>NET</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- VERSE INTERSTITIAL -->
+<div id="verse" class="verse-screen" role="dialog" aria-modal="true" aria-label="Scripture before you continue" hidden>
+  <div class="verse-inner">
+    <p class="mono v-dest"></p>
+    <p class="mono v-text"></p>
+    <p class="mono v-ref" aria-live="polite"><span class="v-ref-text"></span><span class="cursor">▍</span></p>
+    <div class="v-bar"><div></div></div>
+    <div class="row-between">
+      <span class="mono v-status"></span>
+      <div class="row-wrap">
+        <button class="btn btn-ghost-light" data-action="pause">Pause</button>
+        <button class="btn btn-light" data-action="proceed">Proceed →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SITE -->
+<header class="site-header">
+  <div class="wrap header-row">
+    <a href="#home" class="brand" data-go="home" aria-label="SoulCause home"><span data-globe="44" data-spin="24"></span><span class="wordmark">Soul<span>Cause</span></span></a>
+    <nav aria-label="Primary" class="nav" id="nav"></nav>
+  </div>
+</header>
+
+<main id="page-home" class="page">
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="mono">Evangelism consulting · FIELD app · NET services</p>
+      <h1>Back to the roots.<br>Back to the Great Commission.</h1>
+      <p class="lead">SoulCause helps churches return to the Great Commission by equipping the few, sending the many and multiplying disciples to the world.</p>
+      <div class="row-wrap"><button class="btn btn-dark btn-lg" data-go="send">Start with the 12</button><button class="btn btn-sun btn-lg" data-go="field">Explore the FIELD app</button></div>
+    </div>
+    <div class="hero-art"><div data-globe="400" data-spin="10"></div></div>
+  </section>
+
+  <section class="band border-y">
+    <div class="wrap stack">
+      <div class="row-between end"><h2>The 12 → the 70 → the world.</h2><p class="lead-sm">Jesus sent the twelve, then the seventy, then all of us. Every SoulCause product follows the same sending model.</p></div>
+      <div class="grid3">
+        <div class="tier blue"><span class="mono">01 · THE 12 · Matthew 10</span><h3>SEND</h3><p>Select · Equip · Nurture · Deploy. For the core team inside one church.</p><button class="btn btn-light" data-go="send">Enter SEND →</button></div>
+        <div class="tier orange"><span class="mono">02 · THE 70 · Luke 10</span><h3>LABOR</h3><p>Lead · Assign · Build · Organize · Report. For churches sending teams two by two.</p><button class="btn btn-dark" data-go="labor">Enter LABOR →</button></div>
+        <div class="tier green"><span class="mono">03 · THE WORLD · Acts 1:8</span><h3>REACH</h3><p>Resource · Equip · Activate · Connect · Harvest. For networks and ministries.</p><button class="btn btn-dark" data-go="reach">Enter REACH →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band border-b" id="explore" aria-labelledby="explore-title">
+    <div class="wrap stack">
+      <div class="row-between end"><div class="stack tight"><p class="mono">THE FOUR CORNERS · Isaiah 11:12</p><h2 id="explore-title">See the harvest field.</h2></div><p class="lead-sm">Choose a region. See the need, then choose how God is moving your heart.</p></div>
+      <div class="region-pills" role="tablist" aria-label="Regions" id="region-pills"></div>
+      <div class="split explore">
+        <div class="explore-globe"><div id="explore-globe" data-globe="360" data-spin="0"></div></div>
+        <div class="half stack" aria-live="polite">
+          <h3 class="region-name" id="region-name"></h3>
+          <div class="stat-grid">
+            <div class="stat"><span class="num" data-stat="pop"></span><span class="lbl">People</span></div>
+            <div class="stat"><span class="num" data-stat="groups"></span><span class="lbl">People groups</span></div>
+            <div class="stat"><span class="num" data-stat="upg"></span><span class="lbl">Unreached people groups</span></div>
+            <div class="stat"><span class="num" data-stat="workers"></span><span class="lbl">Pioneer workers needed</span></div>
+          </div>
+          <div class="meter"><div class="meter-row"><span>Living in unreached groups</span><b data-stat="upgPct"></b></div><div class="meter-bar"><div id="meter-fill"></div></div>
+          <div class="meter-row"><span>Evangelical</span><b data-stat="evang"></b></div><div class="meter-bar"><div id="meter-evang"></div></div></div>
+          <p class="mono verse-quote" id="region-verse"></p>
+          <div class="stack tight">
+            <p class="strong">How is God moving your heart?</p>
+            <div class="pills" id="focus-pills"></div>
+            <p class="lead-sm" id="focus-line"></p>
+            <button class="btn btn-dark btn-lg" id="focus-cta"></button>
+          </div>
+          <p class="fine" id="region-source"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band black">
+    <div class="wrap stack">
+      <h2>Four pillars. One cause.</h2>
+      <div class="grid4">
+        <div class="pillar"><i style="background:#1F4FD8"></i><h3>Obedience</h3><p>We go because He said go.</p></div>
+        <div class="pillar"><i style="background:#B9A6F0"></i><h3>Faithfulness</h3><p>We measure the sowing. God gives the increase.</p></div>
+        <div class="pillar"><i style="background:#F2711C"></i><h3>Sending</h3><p>Two by two, into every field.</p></div>
+        <div class="pillar"><i style="background:#1E9E5A"></i><h3>Multiplication</h3><p>Good seed returns a hundredfold.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band border-b">
+    <div class="wrap split">
+      <div class="half"><svg viewBox="0 0 520 480" class="tree" role="img" aria-label="Line art tree of life, rooted by a deep taproot, bathed in light and bearing nine fruit of the Spirit" fill="none">
+        <g stroke="#F5C518" stroke-width="4" stroke-linecap="round"><path d="M260 8v34M170 30l14 26M350 30l-14 26M110 72l26 16M410 72l-26 16"/></g>
+        <path class="draw" pathLength="1" d="M260 64c-120 0-196 60-196 140 0 56 60 96 196 96s196-40 196-96c0-80-76-140-196-140z" stroke="#0B0B0C" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round"/>
+        <g stroke="#0B0B0C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M248 380V250c0-30-10-60-30-90M272 380V250c0-30 10-60 30-90"/><path d="M248 300c-30-14-60-30-90-60M272 290c30-14 64-34 96-66M260 250V110M248 230c-20-24-34-50-46-80M272 226c22-20 40-46 50-76"/><path d="M60 380h400"/></g>
+        <path d="M260 380v86" stroke="#1F4FD8" stroke-width="6" stroke-linecap="round"/>
+        <g stroke="#0B0B0C" stroke-width="2.5" stroke-linecap="round"><path d="M256 392c-20 8-40 20-62 40M264 392c20 8 40 20 62 40M258 410c-12 10-22 22-30 40M262 410c12 10 22 22 30 40"/></g>
+        <text x="276" y="462" font-family="IBM Plex Mono, monospace" font-size="15" fill="#1F4FD8">Christ, the root</text>
+        <g stroke="#0B0B0C" stroke-width="2.5" class="fruits">
+          <circle cx="158" cy="240" r="17" fill="#F2711C"/><circle cx="202" cy="150" r="17" fill="#F5C518"/><circle cx="260" cy="104" r="17" fill="#1F4FD8"/><circle cx="322" cy="150" r="17" fill="#1E9E5A"/><circle cx="368" cy="224" r="17" fill="#B9A6F0"/><circle cx="214" cy="204" r="17" fill="#B9A6F0"/><circle cx="306" cy="200" r="17" fill="#F2711C"/><circle cx="190" cy="282" r="17" fill="#1E9E5A"/><circle cx="330" cy="270" r="17" fill="#F5C518"/>
+        </g></svg></div>
+      <div class="half stack">
+        <p class="mono">THE TREE OF LIFE · Galatians 5:22–23</p>
+        <h2>Rooted in Christ. Bearing the fruit of the Spirit.</h2>
+        <p class="mono verse-quote">But the fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith, meekness, temperance: against such there is no law.</p>
+        <div class="chips" id="fruit-chips"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band lav border-b">
+    <div class="wrap split center">
+      <div class="half stack"><p class="mono">SERVICES · Luke 5:4</p><h2>NET</h2><p class="lead-sm">Networks · Events · Training. Consulting delivered the way your people already gather.</p></div>
+      <div class="half"><div class="grid2"><div class="mini">Print</div><div class="mini">In person</div><div class="mini">Virtual</div><div class="mini">Outsourced</div></div></div>
+      <button class="btn btn-dark btn-lg" data-go="net">See NET services →</button>
+    </div>
+  </section>
+
+  <section class="band sun border-b">
+    <div class="wrap stack">
+      <div class="row-between end"><div><p class="mono">THE APP · John 4:35</p><h2>FIELD</h2></div><p class="lead-sm">Faithfulness · Implementation · Evangelism · Leadership · Discipleship. Advice becomes a plan, a plan becomes people sent.</p></div>
+      <div class="grid4">
+        <div class="step-card"><span class="mono small">STEP 1</span><h3>Assess</h3><p>A sending assessment for your church.</p></div>
+        <div class="step-card"><span class="mono small">STEP 2</span><h3>Plan</h3><p>A 90-day sending plan your leaders agree on.</p></div>
+        <div class="step-card"><span class="mono small">STEP 3</span><h3>Act</h3><p>Every action has an owner and a due date.</p></div>
+        <div class="step-card"><span class="mono small">STEP 4</span><h3>Report</h3><p>Measures of faithfulness: conversations, people trained, teams sent.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap split center">
+      <div class="founder-mark"><div data-globe="170" data-spin="14"></div></div>
+      <div class="half stack">
+        <p class="mono">ROOT · Our founder</p>
+        <h2>Danny Duval, Founder</h2>
+        <p class="lead-sm">[Danny's calling story, in his own words: what God put on his heart and why SoulCause exists.]</p>
+        <p class="lead-sm strong">Good seed, sown faithfully, returns a hundredfold. That harvest is the sole cause of SoulCause.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<main id="page-sub" class="page" hidden>
+  <section class="sub-hero" id="sub-hero">
+    <div class="wrap stack">
+      <span class="mono" id="sub-tier"></span>
+      <h1 class="giant" id="sub-name"></h1>
+      <div class="chips" id="sub-letters"></div>
+      <p class="lead" id="sub-lead"></p>
+    </div>
+  </section>
+  <section class="wrap stack pad">
+    <div class="grid-auto" id="sub-cards"></div>
+    <div class="price-row">
+      <div><span class="mono small">PRICING</span><p class="price" id="sub-price"></p></div>
+      <div class="row-wrap"><button class="btn btn-ghost" data-go="home">← Home</button><button class="btn btn-dark" id="sub-next"></button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap row-between"><span class="wordmark">Soul<span>Cause</span></span><span>Scripture quotations: King James Version (public domain).</span></div></footer>
+
+<script src="/assets/js/continents.js"></script>
+<script src="/assets/js/globe.js"></script>
+<script src="/assets/js/content.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
