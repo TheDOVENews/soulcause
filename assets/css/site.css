@@ -199,3 +199,15 @@ legend{font-weight:600;font-size:14px;margin-bottom:8px}
 .stack-pills{flex-direction:column;align-items:stretch}
 .stack-pills .pill{min-height:52px;font-size:16px;text-align:left;padding:0 20px;border-radius:14px}
 @media (prefers-reduced-motion: reduce){.q{animation:none}}
+
+/* acronym: one horizontal line, no outlines */
+.acro{display:flex;justify-content:space-between;gap:6px;max-width:720px;border-top:2px solid currentColor;padding-top:16px}
+.acro-item{display:flex;flex-direction:column;gap:4px;min-width:0}
+.acro-item b{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,7vw,44px);line-height:1}
+.acro-item span{font-size:clamp(9.5px,2.45vw,16px);font-weight:600;line-height:1.25;white-space:nowrap;letter-spacing:-.01em}
+/* aligned buttons on phones */
+@media (max-width:560px){
+  .price-row,.price-row .row-wrap{flex-direction:column;align-items:stretch;width:100%}
+  .price-row .btn{width:100%}
+  .row-wrap>.btn-lg{width:100%}
+}

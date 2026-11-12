@@ -126,7 +126,7 @@
       var p = C.pages[page];
       var hero = $('#sub-hero'); hero.style.background = p.color; hero.style.color = p.ink;
       $('#sub-tier').textContent = p.tier; $('#sub-name').textContent = p.name; $('#sub-lead').textContent = p.lead;
-      $('#sub-letters').innerHTML = p.letters.map(function (l) { return '<span class="chip"><b>' + l[0] + '</b>' + l[1] + '</span>'; }).join('');
+      $('#sub-letters').innerHTML = p.letters.map(function (l) { return '<span class="acro-item"><b>' + l[0] + '</b><span>' + l[1] + '</span></span>'; }).join('');
       $('#sub-cards').innerHTML = p.cards.map(function (c) { return '<div class="card"><span class="bar" style="background:' + p.color + '"></span><h3>' + c[0] + '</h3><p>' + c[1] + '</p></div>'; }).join('');
       $('#sub-price').textContent = p.price;
       var nx = $('#sub-next'); nx.textContent = p.cta; nx.setAttribute('data-go', p.next);
