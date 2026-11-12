@@ -38,3 +38,5 @@ A static site (HTML, CSS, vanilla JavaScript) with two small Vercel functions an
 - Replace `[YOUR PRICE]` placeholders and Danny's founder story.
 - Decide who reads prayer requests and follows up (`followed_up_at`).
 - Point soulcause.com at Vercel in GoDaddy DNS.
+
+Deploys automatically from `main` to soulcause.com.
