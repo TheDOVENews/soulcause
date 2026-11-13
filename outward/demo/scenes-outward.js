@@ -14,9 +14,9 @@
       } },
 
     { mood: 'drive', theme: 'night', t: 12, tone: 'Upbeat and crisp, with rhythm. Mirror the two lists.',
-      say: 'OUTWARD. Obedience, unity, truth, wisdom, accountability, readiness, diligence… mirrored in operations, updates, tasks, workforce, accountability, reporting and direction.',
+      say: 'OUTWARD. Obedience, unity, truth, wisdom, abiding, readiness, discernment… mirrored in operations, updates, tasks, workforce, accountability, reporting and direction.',
       build: function (el, A) {
-        var V = ['Obedience', 'Unity', 'Truth', 'Wisdom', 'Accountability', 'Readiness', 'Diligence'], F = ['Operations', 'Updates', 'Tasks', 'Workforce', 'Accountability', 'Reporting', 'Direction'];
+        var V = ['Obedience', 'Unity', 'Truth', 'Wisdom', 'Abiding', 'Readiness', 'Discernment'], F = ['Operations', 'Updates', 'Tasks', 'Workforce', 'Accountability', 'Reporting', 'Direction'];
         el.innerHTML = '<div class="mirror-cols"><div class="col l"><div class="mono head">What we value</div>' + V.map(function (v, k) { return '<div class="w a up" ' + D((0.9 + k * 0.55).toFixed(2)) + '>' + v + '</div>'; }).join('') + '</div>'
           + '<div class="letters"><div class="mono head" style="color:inherit;visibility:hidden">·</div>' + 'OUTWARD'.split('').map(function (c, k) { return '<span class="a pop" ' + D((0.2 + k * 0.08).toFixed(2)) + '>' + c + '</span>'; }).join('') + '</div>'
           + '<div class="col r"><div class="mono head">How we work</div>' + F.map(function (v, k) { return '<div class="w a up" ' + D((5.2 + k * 0.6).toFixed(2)) + '>' + v + '</div>'; }).join('') + '</div></div>';

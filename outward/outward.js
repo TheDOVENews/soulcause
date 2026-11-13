@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://orhmsmxnfokupmtctueu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_eI838082EIyT7JVnvKIllQ_v3cRZQZL';
 const sb = (window.__OUTWARD_TEST_CLIENT__ || createClient)(SUPABASE_URL, SUPABASE_KEY);
 
-const VALUES = ['Obedience', 'Unity', 'Truth', 'Wisdom', 'Accountability', 'Readiness', 'Diligence'];
+const VALUES = ['Obedience', 'Unity', 'Truth', 'Wisdom', 'Abiding', 'Readiness', 'Discernment'];
 const FUNCS = ['Operations', 'Updates', 'Tasks', 'Workforce', 'Accountability', 'Reporting', 'Direction'];
 const DONE = ['done', 'cancelled', 'paid', 'received', 'closed', 'terminated', 'accepted', 'expired'];
 
