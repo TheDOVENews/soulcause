@@ -1,0 +1,24 @@
+# SoulCause
+User-agent: *
+Allow: /
+Disallow: /outward
+Disallow: /api/
+Disallow: /demo
+
+# AI assistants and search crawlers are welcome on the public site
+User-agent: GPTBot
+Allow: /
+Disallow: /outward
+Disallow: /api/
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+Disallow: /outward
+Disallow: /api/
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://soulcause.com/sitemap.xml
