@@ -19,7 +19,7 @@ function unlocked(req) {
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  const key = process.env.OPENAI_API_KEY;
+  const key = process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY;
   if (req.method === 'GET') return res.status(200).json({ ready: !!key && unlocked(req) });
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   if (!unlocked(req)) return res.status(401).json({ error: 'Unlock OUTWARD first' });
