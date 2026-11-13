@@ -32,7 +32,7 @@
     var soil = kind === 'withered'
       ? '<path class="soil-old" d="M20 470H580"/><path class="soil-old" d="M60 486h90M200 492h60M330 486h120M480 494h70" stroke-dasharray="6 9"/>'
       : '<path class="soil-new" d="M20 470H580"/><path class="soil-new" d="M50 488h120M220 496h70M330 488h140M500 496h50" stroke-dasharray="10 8"/>';
-    var tap = o.taproot ? '<path class="taproot" pathLength="1" d="M300 470 C302 530 297 590 300 640" style="animation:draw 2.2s ease ' + o.taproot + 's forwards"/><g class="cross a pop" ' + D(o.taproot + 2) + '><path d="M300 640v56M278 660h44"/></g>' : '';
+    var tap = o.taproot ? '<path class="taproot" pathLength="1" d="M300 470 C302 515 297 555 300 590" style="animation:draw 2.2s ease ' + o.taproot + 's forwards"/><g class="cross a pop" ' + D(o.taproot + 2) + '><circle cx="300" cy="628" r="36"/><path d="M300 604v48M284 620h32"/></g>' : '';
     var light = o.light != null ? '<circle class="light" cx="300" cy="300" r="320" style="animation:fadeIn 2.5s ease ' + o.light + 's forwards"/>' : '';
     var haze = kind === 'withered' ? '<ellipse class="haze" cx="300" cy="300" rx="280" ry="230"/>' : '';
     return '<svg viewBox="0 0 600 700" aria-hidden="true"><defs><radialGradient id="sunglow"><stop offset="0" stop-color="#F5C518" stop-opacity=".55"/><stop offset=".6" stop-color="#F5C518" stop-opacity=".12"/><stop offset="1" stop-color="#F5C518" stop-opacity="0"/></radialGradient></defs>'
