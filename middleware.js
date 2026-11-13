@@ -39,8 +39,26 @@ button{min-height:52px;border-radius:10px;border:2px solid #F5C518;background:#F
 ${bad ? '<p class="bad" role="alert">That password is not right. Please try again.</p>' : ''}
 <form method="post" action="/outward/unlock"><input type="hidden" name="next" value="${next || '/outward/'}"><label>Access key<input type="password" name="password" autocomplete="current-password" required autofocus></label><button type="submit">Unlock</button></form></main></body></html>`;
 
+// Link previews (iMessage, WhatsApp, Facebook, LinkedIn, X, Slack...) get a small share card,
+// never the content behind the lock.
+const BOTS = /facebookexternalhit|Facebot|Twitterbot|Slackbot|WhatsApp|LinkedInBot|Discordbot|TelegramBot|Applebot|SkypeUriPreview|Pinterest|redditbot|Embedly/i;
+function shareCard(path) {
+  const demo = path.startsWith('/outward/demo');
+  const isOw = path.startsWith('/outward/demo/outward') || !demo;
+  const title = demo ? (isOw ? 'OUTWARD · Cinematic demo' : 'The Two Trees · SoulCause cinematic demo') : 'OUTWARD · SoulCause back office';
+  const desc = demo ? (isOw ? 'Compliance, Operations and Reporting for SoulCause, with OWL built in.' : 'From withered branches to the tree of life. The story behind SoulCause.') : 'Private back office for SoulCause staff.';
+  const img = 'https://soulcause.com/assets/img/og-soulcause-v2.png';
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><meta name="robots" content="noindex">
+<meta property="og:type" content="website"><meta property="og:site_name" content="SoulCause"><meta property="og:title" content="${title}"><meta property="og:description" content="${desc}">
+<meta property="og:url" content="https://soulcause.com${path}"><meta property="og:image" content="${img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${title}"><meta name="twitter:description" content="${desc}"><meta name="twitter:image" content="${img}"></head><body></body></html>`;
+}
+
 export default async function middleware(req) {
   const url = new URL(req.url);
+  if (req.method === 'GET' && BOTS.test(req.headers.get('user-agent') || '')) {
+    return new Response(shareCard(url.pathname), { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'X-Robots-Tag': 'noindex' } });
+  }
   const want = (process.env.OUTWARD_PASS_SHA256 || '').toLowerCase();
   if (!want) return new Response('OUTWARD is not set up yet.', { status: 503, headers: { 'Cache-Control': 'no-store' } });
   const token = await sha256(want + ':outward-v1');
