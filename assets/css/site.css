@@ -211,3 +211,7 @@ legend{font-weight:600;font-size:14px;margin-bottom:8px}
   .price-row .btn{width:100%}
   .row-wrap>.btn-lg{width:100%}
 }
+
+.founder-photo{flex:0 0 min(320px,100%);align-self:flex-start;margin:0;display:flex;flex-direction:column;gap:8px}
+.founder-photo img{width:100%;height:auto;aspect-ratio:592/740;object-fit:cover;border:var(--line);border-radius:18px;display:block}
+.founder-photo figcaption{font-size:11px}
