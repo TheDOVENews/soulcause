@@ -1,11 +1,11 @@
-// OWL (Omnichannel Wisdom Language) inside OUTWARD.
+// sOWL (systems Omnichannel Wisdom Language) inside OUTWARD.
 // Answers staff questions about the records they can already see, through Vercel AI Gateway
 // (OpenAI model, project OIDC token, no key stored). Only signed-in OUTWARD staff may ask.
 const MODEL = process.env.OUTWARD_OWL_MODEL || 'openai/gpt-4.1-mini';
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
-const SYSTEM = `You are OWL (Omnichannel Wisdom Language), the assistant inside OUTWARD, the back office of SoulCause, an evangelism-consulting ministry.
+const SYSTEM = `You are sOWL (systems Omnichannel Wisdom Language), the assistant inside OUTWARD, the back office of SoulCause, an evangelism-consulting ministry.
 OUTWARD runs COR: Compliance, Operations and Reporting across Tasks, Schedule, People (HR), Finance, Legal, Marketing and Risk (ERM).
 Help the signed-in staff member understand what needs attention, summarize, draft checklists, emails and reports, and suggest next steps.
 Rules:
@@ -31,19 +31,19 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return res.status(405).json({ error: 'Method not allowed' }); }
   const token = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
   const staff = await staffFor(token).catch(() => null);
-  if (!staff) return res.status(401).json({ error: 'Sign in to OUTWARD to ask OWL.' });
+  if (!staff) return res.status(401).json({ error: 'Sign in to OUTWARD to ask sOWL.' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   const msgs = (Array.isArray(body?.messages) ? body.messages : [])
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
     .slice(-12).map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }));
-  if (!msgs.length || msgs[msgs.length - 1].role !== 'user') return res.status(400).json({ error: 'Ask OWL a question.' });
+  if (!msgs.length || msgs[msgs.length - 1].role !== 'user') return res.status(400).json({ error: 'Ask sOWL a question.' });
   const context = String(body?.context || '').slice(0, 24000);
   const view = String(body?.view || '').slice(0, 40);
 
   const auth = process.env.AI_GATEWAY_API_KEY || req.headers['x-vercel-oidc-token'] || process.env.VERCEL_OIDC_TOKEN;
-  if (!auth) return res.status(503).json({ error: 'OWL is resting right now.' });
+  if (!auth) return res.status(503).json({ error: 'sOWL is resting right now.' });
   try {
     const r = await fetch('https://ai-gateway.vercel.sh/v1/chat/completions', {
       method: 'POST',
@@ -58,12 +58,12 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(25000)
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok) { console.error('owl gateway', r.status, JSON.stringify(j).slice(0, 400)); return res.status(502).json({ error: 'OWL could not answer just now. Please try again.' }); }
+    if (!r.ok) { console.error('owl gateway', r.status, JSON.stringify(j).slice(0, 400)); return res.status(502).json({ error: 'sOWL could not answer just now. Please try again.' }); }
     const c = j?.choices?.[0]?.message?.content;
     const text = (Array.isArray(c) ? c.map((p) => p?.text || '').join('') : String(c || '')).trim();
     return res.status(200).json({ reply: text || 'I don’t have an answer for that yet.' });
   } catch (e) {
     console.error('owl', e && e.message);
-    return res.status(502).json({ error: 'OWL could not answer just now. Please try again.' });
+    return res.status(502).json({ error: 'sOWL could not answer just now. Please try again.' });
   }
 }

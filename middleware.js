@@ -46,7 +46,7 @@ function shareCard(path) {
   const demo = path.startsWith('/outward/demo');
   const isOw = path.startsWith('/outward/demo/outward') || !demo;
   const title = demo ? (isOw ? 'OUTWARD · Cinematic demo' : 'The Two Trees · SoulCause cinematic demo') : 'OUTWARD · SoulCause back office';
-  const desc = demo ? (isOw ? 'Compliance, Operations and Reporting for SoulCause, with OWL built in.' : 'From withered branches to the tree of life. The story behind SoulCause.') : 'Private back office for SoulCause staff.';
+  const desc = demo ? (isOw ? 'Compliance, Operations and Reporting for SoulCause, with sOWL built in.' : 'From withered branches to the tree of life. The story behind SoulCause.') : 'Private back office for SoulCause staff.';
   const img = 'https://soulcause.com/assets/img/og-soulcause-v2.png';
   return `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><meta name="robots" content="noindex">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SoulCause"><meta property="og:title" content="${title}"><meta property="og:description" content="${desc}">

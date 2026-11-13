@@ -35,7 +35,7 @@
     <button class="btn dark" type="submit">Sign in</button>
     <button class="link" type="button" id="reset-link">Forgot password?</button>
     <button class="link" type="button" id="request-link">New here? Request access</button>
-    <p class="fine">Only invited SoulCause staff can sign in. OUTWARD and OWL are organizational aids, not legal, tax, financial or HR advice. <a href="/legal#disclosures" target="_blank" rel="noopener">Disclosures</a> · <a href="/legal#terms" target="_blank" rel="noopener">Terms</a> · <a href="/legal#privacy" target="_blank" rel="noopener">Privacy</a></p>
+    <p class="fine">Only invited SoulCause staff can sign in. OUTWARD and sOWL are organizational aids, not legal, tax, financial or HR advice. <a href="/legal#disclosures" target="_blank" rel="noopener">Disclosures</a> · <a href="/legal#terms" target="_blank" rel="noopener">Terms</a> · <a href="/legal#privacy" target="_blank" rel="noopener">Privacy</a></p>
   </form>
   <form id="request-form" class="card" novalidate hidden>
     <h1>Request access</h1>
@@ -67,7 +67,7 @@
       </div>
       <div class="top-actions">
         <button class="bell" id="bell" aria-label="Alerts"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><b id="bell-count" hidden></b></button>
-        <button class="btn sun" id="owl-open">Ask OWL</button>
+        <button class="btn sun" id="owl-open">Ask sOWL</button>
         <button class="btn dark" id="add-btn" hidden>+ Add</button>
       </div>
     </header>
@@ -90,12 +90,12 @@
   </form>
 </dialog>
 
-<!-- OWL -->
-<aside id="owl" class="owl" hidden aria-label="OWL assistant">
-  <div class="owl-head"><div><b>OWL</b><small>Omnichannel Wisdom Language</small></div><button class="x light" id="owl-close" aria-label="Close OWL">×</button></div>
+<!-- sOWL -->
+<aside id="owl" class="owl" hidden aria-label="sOWL assistant">
+  <div class="owl-head"><div><b>sOWL</b><small>systems Omnichannel Wisdom Language</small></div><button class="x light" id="owl-close" aria-label="Close sOWL">×</button></div>
   <div class="owl-log" id="owl-log"></div>
   <div class="owl-chips" id="owl-chips"></div>
-  <form class="owl-form" id="owl-form"><textarea name="q" rows="2" placeholder="Ask about your tasks, people, budgets, risks…" aria-label="Ask OWL"></textarea><button class="btn sun" type="submit">Send</button></form>
+  <form class="owl-form" id="owl-form"><textarea name="q" rows="2" placeholder="Ask about your tasks, people, budgets, risks…" aria-label="Ask sOWL"></textarea><button class="btn sun" type="submit">Send</button></form>
 </aside>
 
 <script type="module" src="/outward/outward.js"></script>

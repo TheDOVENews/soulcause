@@ -1,6 +1,6 @@
 /* OUTWARD: SoulCause back office. COR: Compliance, Operations and Reporting.
    Sign-in and data through Supabase (publishable key is public by design; the database
-   rules decide what each role may see). OWL answers through /api/owl. */
+   rules decide what each role may see). sOWL answers through /api/owl. */
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { createAccounting } from './accounting.js';
 
@@ -375,7 +375,7 @@ async function saveStaff() {
   dlg.close(); const { data } = await sb.from('outward_staff').select('email,name,role,active').order('name'); S.staff = data || []; render();
 }
 
-/* ---------- OWL ---------- */
+/* ---------- sOWL ---------- */
 const CHIPS = ['What needs my attention this week?', 'Summarize where we stand on COR', 'Draft an onboarding welcome email', 'Which risks should we review first?'];
 function owlContext() {
   const lines = [];
@@ -396,7 +396,7 @@ function owlContext() {
 }
 function paintOwl() {
   const log = $('#owl-log');
-  log.innerHTML = (S.owl.length ? S.owl : [{ role: 'assistant', content: `Hello${S.me?.name ? ', ' + S.me.name.split(' ')[0] : ''}. I’m OWL. Ask me what needs attention, or for a summary, checklist or draft. I\u2019m an AI guide, not a lawyer, accountant or HR professional, so check important answers with one.` }])
+  log.innerHTML = (S.owl.length ? S.owl : [{ role: 'assistant', content: `Hello${S.me?.name ? ', ' + S.me.name.split(' ')[0] : ''}. I’m sOWL. Ask me what needs attention, or for a summary, checklist or draft. I\u2019m an AI guide, not a lawyer, accountant or HR professional, so check important answers with one.` }])
     .map((m) => `<div class="msg ${m.role === 'user' ? 'u' : 'a'}">${esc(m.content)}</div>`).join('');
   log.scrollTop = log.scrollHeight;
   $('#owl-chips').innerHTML = S.owl.length ? '' : CHIPS.map((c) => `<button type="button">${esc(c)}</button>`).join('');
@@ -409,8 +409,8 @@ async function ask(q) {
     const { data } = await sb.auth.getSession();
     const r = await fetch('/api/owl', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (data?.session?.access_token || '') }, body: JSON.stringify({ messages: S.owl, context: owlContext(), view: S.view }) });
     const j = await r.json().catch(() => ({}));
-    S.owl.push({ role: 'assistant', content: j.reply || j.error || 'OWL could not answer just now.' });
-  } catch { S.owl.push({ role: 'assistant', content: 'OWL could not answer just now. Please try again.' }); }
+    S.owl.push({ role: 'assistant', content: j.reply || j.error || 'sOWL could not answer just now.' });
+  } catch { S.owl.push({ role: 'assistant', content: 'sOWL could not answer just now. Please try again.' }); }
   paintOwl();
 }
 $('#owl-open').addEventListener('click', () => { $('#owl').hidden = false; paintOwl(); $('#owl-form textarea').focus(); });

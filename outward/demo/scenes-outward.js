@@ -32,7 +32,7 @@
       } },
 
     { mood: 'drive', theme: 'day', t: 12, tone: 'Bright, reassuring, practical.',
-      say: 'Upload a bank or card statement. OWL reads every line, sorts every dollar… and waits for your approval.',
+      say: 'Upload a bank or card statement. sOWL reads every line, sorts every dollar… and waits for your approval.',
       build: function (el, A) {
         var R = [['Online giving deposit', '+$3,200', 'Donations'], ['Field subscriptions', '+$480', 'Subscriptions'], ['Printshop workbooks', '−$850', 'Printing'], ['Zoom video', '−$149.90', 'Software'], ['Delta Air', '−$420', 'Travel']];
         el.innerHTML = '<div class="acct"><div class="panel pdf a slam" ' + D(0.3) + '><b style="font-size:13px">Statement.pdf</b><i style="width:80%"></i><i></i><i style="width:60%"></i><i></i><i style="width:70%"></i><i></i><i style="width:50%"></i><i></i><span class="scan"></span></div>'
@@ -52,9 +52,9 @@
       } },
 
     { mood: 'joy', theme: 'day', t: 11, tone: 'Curious, then delighted. Read the question like you are asking it.',
-      say: 'And when you need wisdom… ask OWL.',
+      say: 'And when you need wisdom… ask sOWL.',
       build: function (el, A) {
-        el.innerHTML = '<div class="panel chat a up" ' + D(0.2) + '><div class="hd"><i>🦉</i>OWL <span class="mono" style="font-size:10px;font-weight:400;opacity:.6;margin-left:auto">Sample answer</span></div><div class="bub me" id="q"></div><div class="bub owl a fade" ' + D(3.6) + ' id="r"></div></div>';
+        el.innerHTML = '<div class="panel chat a up" ' + D(0.2) + '><div class="hd"><i>🦉</i>sOWL <span class="mono" style="font-size:10px;font-weight:400;opacity:.6;margin-left:auto">Sample answer</span></div><div class="bub me" id="q"></div><div class="bub owl a fade" ' + D(3.6) + ' id="r"></div></div>';
         var end = typeInto(A, el.querySelector('#q'), 'What needs my attention this week?', 0.8, 16);
         A.at(end + 0.3, function () { A.sfx('pop'); });
         typeInto(A, el.querySelector('#r'), '3 transactions are waiting for approval, one onboarding step is due Friday, and your quarterly compliance filing is due in 9 days. Want me to draft the checklist?', end + 0.6, 34);
@@ -77,7 +77,7 @@
         el.innerHTML = '<div class="center" style="gap:12px"><div><div class="wm">' + w + '</div><div class="wm mirror" aria-hidden="true">' + w + '</div></div>'
           + '<div class="a fade" ' + D(1.5) + ' style="font-family:Space Grotesk,sans-serif;font-weight:600;font-size:clamp(18px,2.6vw,26px)">So the mission keeps moving outward.</div>'
           + '<div class="btns a fade" ' + D(3) + '><a class="btn" href="/outward/" style="background:#0B0B0C;border-color:#0B0B0C;color:#fff">Enter OUTWARD</a><a class="btn" href="/outward/demo/">Watch the SoulCause demo</a></div>'
-          + '<p class="disc a fade" ' + D(3.4) + '>Figures shown are samples. OUTWARD and OWL help organize records; they are not legal, tax, accounting or HR advice.</p></div>';
+          + '<p class="disc a fade" ' + D(3.4) + '>Figures shown are samples. OUTWARD and sOWL help organize records; they are not legal, tax, accounting or HR advice.</p></div>';
       } }
   ];
 

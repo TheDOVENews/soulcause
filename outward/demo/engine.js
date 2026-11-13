@@ -1,6 +1,6 @@
 /* SoulCause cinematic demo engine.
  * Plays a list of scenes with a live score, timed sound effects, a KJV verse (reference typed out),
- * captions, and OWL Voice narration (OpenAI text-to-speech through /api/voice) when it is turned on.
+ * captions, and sOWL Voice narration (OpenAI text-to-speech through /api/voice) when it is turned on.
  * Pause, previous, next, mute and replay. Keyboard: space, arrow keys, M. */
 (function () {
   function $(s, r) { return (r || document).querySelector(s); }
@@ -12,11 +12,11 @@
     var i = -1, elapsed = 0, dur = 0, playing = false, events = [], last = 0, audio = null, voiceOn = false, voices = [], muted = false, finished = false;
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // --- OWL Voice ---
+    // --- sOWL Voice ---
     var status = $('#voice-status');
     fetch('/api/voice', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : { ready: false }; }).catch(function () { return { ready: false }; }).then(function (s) {
       voiceOn = !!s.ready;
-      if (status) status.textContent = voiceOn ? 'Narration: OWL Voice, powered by OpenAI' : 'Narration: on-screen captions. The OWL Voice turns on once an OpenAI key is added in Vercel.';
+      if (status) status.textContent = voiceOn ? 'Narration: sOWL Voice, powered by OpenAI' : 'Narration: on-screen captions. The sOWL Voice turns on once an OpenAI key is added in Vercel.';
       if (voiceOn) scenes.forEach(function (sc, k) { voices[k] = sc.say ? fetchVoice(sc) : Promise.resolve(null); });
     });
     function fetchVoice(sc) {

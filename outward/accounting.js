@@ -284,7 +284,7 @@ export function createAccounting({ sb, esc, money, rerender, token }) {
   function uploadPDF(sourceId) {
     let parsed = null, file = null, stmt = {};
     const d = dialog('Upload statement', `<label>Bank or card<select name="src">${srcOptions(sourceId)}</select></label><label>PDF statement<input name="file" type="file" accept="application/pdf,.pdf"></label><div data-prev></div>
-      <p class="fine">OUTWARD reads the statement with OWL (AI), shows you every transaction, and imports only after you approve. The PDF is stored privately. Always compare totals with your statement.</p>`, async (f) => {
+      <p class="fine">OUTWARD reads the statement with sOWL (AI), shows you every transaction, and imports only after you approve. The PDF is stored privately. Always compare totals with your statement.</p>`, async (f) => {
       if (!f.src.value) return 'Choose the bank or card this statement belongs to.';
       if (!file) return 'Choose a PDF statement first.';
       if (!parsed) return 'Wait for the statement to finish reading.';
