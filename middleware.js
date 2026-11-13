@@ -30,14 +30,14 @@ function cookie(req, name) {
   const m = (req.headers.get('cookie') || '').match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
   return m ? m[1] : '';
 }
-const page = (bad) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>OUTWARD</title>
+const page = (bad, next) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>OUTWARD</title>
 <style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0B0B0C;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 main{width:min(380px,90vw);display:flex;flex-direction:column;gap:18px}h1{margin:0;font-size:44px;letter-spacing:.08em}.m{margin:-14px 0 0;font-size:44px;letter-spacing:.08em;font-weight:700;transform:scaleY(-1);opacity:.18;line-height:1}
 p{margin:0;color:#CFCFCF;line-height:1.5}label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}input{min-height:50px;border-radius:10px;border:2px solid #fff;background:#fff;color:#0B0B0C;font-size:17px;padding:0 14px}
 button{min-height:52px;border-radius:10px;border:2px solid #F5C518;background:#F5C518;color:#0B0B0C;font-weight:700;font-size:16px}.bad{color:#FFB4A9;font-weight:600}</style></head>
 <body><main><div><h1>OUTWARD</h1><div class="m" aria-hidden="true">OUTWARD</div></div><p>SoulCause back office. Enter the access key.</p>
 ${bad ? '<p class="bad" role="alert">That password is not right. Please try again.</p>' : ''}
-<form method="post" action="/outward/unlock"><label>Access key<input type="password" name="password" autocomplete="current-password" required autofocus></label><button type="submit">Unlock</button></form></main></body></html>`;
+<form method="post" action="/outward/unlock"><input type="hidden" name="next" value="${next || '/outward/'}"><label>Access key<input type="password" name="password" autocomplete="current-password" required autofocus></label><button type="submit">Unlock</button></form></main></body></html>`;
 
 export default async function middleware(req) {
   const url = new URL(req.url);
@@ -48,6 +48,8 @@ export default async function middleware(req) {
   if (url.pathname === '/outward/unlock' && req.method === 'POST') {
     const form = await req.formData().catch(() => null);
     const pass = form ? String(form.get('password') || '') : '';
+    const nx = form ? String(form.get('next') || '') : '';
+    const next = /^\/outward(\/[A-Za-z0-9/_-]*)?$/.test(nx) && nx !== '/outward/unlock' ? nx : '/outward/';
     if (pass && (await sha256(pass)) === want) {
       const setCookie = `${COOKIE}=${token}; Path=/; Max-Age=1209600; HttpOnly; Secure; SameSite=Lax`;
       // The access key alone signs in the owner account (email kept in the Vercel setting
@@ -56,13 +58,13 @@ export default async function middleware(req) {
       const session = await ownerSession(pass);
       if (session) {
         const js = JSON.stringify(session).replace(/</g, '\\u003c');
-        const html = `<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>OUTWARD</title><body style="background:#0B0B0C"><script>try{localStorage.setItem(${JSON.stringify(STORAGE_KEY)},${JSON.stringify(js)})}catch(e){}location.replace('/outward/')</script></body>`;
+        const html = `<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>OUTWARD</title><body style="background:#0B0B0C"><script>try{localStorage.setItem(${JSON.stringify(STORAGE_KEY)},${JSON.stringify(js)})}catch(e){}location.replace(${JSON.stringify(next)})</script></body>`;
         return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Set-Cookie': setCookie, 'Cache-Control': 'no-store' } });
       }
-      return new Response(null, { status: 303, headers: { Location: '/outward/', 'Set-Cookie': setCookie, 'Cache-Control': 'no-store' } });
+      return new Response(null, { status: 303, headers: { Location: next, 'Set-Cookie': setCookie, 'Cache-Control': 'no-store' } });
     }
-    return new Response(page(true), { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
+    return new Response(page(true, next), { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
   }
   if (cookie(req, COOKIE) === token) return; // unlocked: serve the app
-  return new Response(page(false), { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } });
+  return new Response(page(false, url.pathname), { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } });
 }

@@ -56,6 +56,16 @@
       "source": "/disclosures",
       "destination": "/legal#disclosures",
       "permanent": false
+    },
+    {
+      "source": "/demo",
+      "destination": "/outward/demo/",
+      "permanent": false
+    },
+    {
+      "source": "/demo/outward",
+      "destination": "/outward/demo/outward",
+      "permanent": false
     }
   ],
   "functions": {
@@ -63,6 +73,9 @@
       "maxDuration": 60
     },
     "api/owl.mjs": {
+      "maxDuration": 30
+    },
+    "api/voice.mjs": {
       "maxDuration": 30
     }
   }
