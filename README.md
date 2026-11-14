@@ -35,7 +35,7 @@ A static site (HTML, CSS, vanilla JavaScript) with two small Vercel functions an
 
 ## Before launch
 
-- Replace `[YOUR PRICE]` placeholders and Danny's founder story.
+- Leadership section intentionally names no individuals; it keeps the focus on Jesus.
 - Decide who reads prayer requests and follows up (`followed_up_at`).
 - Point soulcause.com at Vercel in GoDaddy DNS.
 
