@@ -7,7 +7,7 @@ window.SC_CONTENT = {
     obedience: { dest: 'OBEDIENCE', color: '#B9A6F0', ref: 'Matthew 28:19–20 (KJV)', text: 'Go ye therefore, and teach all nations… teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world.' },
     unreached: { dest: 'UNREACHED', color: '#1E9E5A', ref: 'Romans 15:20 (KJV)', text: 'Yea, so have I strived to preach the gospel, not where Christ was named, lest I should build upon another man\'s foundation.' }
   },
-  nav: [['home','HOME','#0B0B0C'],['send','SEND','#1F4FD8'],['obedience','OBEDIENCE','#B9A6F0'],['unreached','UNREACHED','#1E9E5A'],['labor','LABOR','#F2711C']],
+  nav: [['send','SEND','#1F4FD8'],['obedience','OBEDIENCE','#B9A6F0'],['unreached','UNREACHED','#1E9E5A'],['labor','LABOR','#F2711C']],
   alias: { reach: 'unreached', net: 'obedience', field: 'obedience' },
   fruit: [['Love','#F2711C'],['Joy','#F5C518'],['Peace','#1F4FD8'],['Longsuffering','#1E9E5A'],['Gentleness','#B9A6F0'],['Goodness','#B9A6F0'],['Faith','#F2711C'],['Meekness','#1E9E5A'],['Temperance','#F5C518']],
   pages: {
