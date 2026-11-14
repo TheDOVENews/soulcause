@@ -225,3 +225,10 @@ legend{font-weight:600;font-size:14px;margin-bottom:8px}
 .soul-card .btn{align-self:flex-start;text-decoration:none}
 @media (max-width:900px){.soul-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.soul-grid{grid-template-columns:1fr}.soul-card .btn{align-self:stretch;justify-content:center}}
+/* SOUL navigation: one line on phones */
+@media (max-width:640px){
+  .nav{flex-wrap:nowrap;justify-content:space-between;gap:0;width:100%}
+  .nav a{padding:10px 2px 6px;font-size:clamp(10px,2.9vw,13px);letter-spacing:.03em}
+}
+.giant{overflow-wrap:normal}
+#sub-name{font-size:min(clamp(64px,12vw,96px),calc(88vw / var(--len,6) * 1.4))}

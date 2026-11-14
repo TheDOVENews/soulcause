@@ -125,7 +125,7 @@
     if (!home) {
       var p = C.pages[page];
       var hero = $('#sub-hero'); hero.style.background = p.color; hero.style.color = p.ink;
-      $('#sub-tier').textContent = p.tier; $('#sub-name').textContent = p.name; $('#sub-lead').textContent = p.lead;
+      $('#sub-tier').textContent = p.tier; $('#sub-name').textContent = p.name; $('#sub-name').style.setProperty('--len', p.name.length); $('#sub-lead').textContent = p.lead;
       $('#sub-letters').innerHTML = p.letters.map(function (l) { return '<span class="acro-item"><b>' + l[0] + '</b><span>' + l[1] + '</span></span>'; }).join('');
       $('#sub-cards').innerHTML = p.cards.map(function (c) { return '<div class="card"><span class="bar" style="background:' + p.color + '"></span><h3>' + c[0] + '</h3><p>' + c[1] + '</p></div>'; }).join('');
       $('#sub-price').textContent = p.price;
@@ -138,6 +138,7 @@
   /* ---------- verse interstitial: verse shown at once, reference types, 3s hold ---------- */
   var vs = $('#verse'), timer = null;
   function go(page) {
+    if (C.alias && C.alias[page]) page = C.alias[page];
     if (!C.verses[page]) page = 'home';
     if (location.hash !== '#' + page) history.pushState(null, '', '#' + page);
     showVerse(page);
@@ -183,7 +184,7 @@
     var t = e.target.closest('[data-go]'); if (!t || welcome.contains(t)) return;
     e.preventDefault(); go(t.getAttribute('data-go'));
   });
-  window.addEventListener('popstate', function () { var h = (location.hash || '#home').slice(1); render(C.verses[h] ? h : 'home'); });
+  window.addEventListener('popstate', function () { var h = (location.hash || '#home').slice(1); h = (C.alias && C.alias[h]) || h; render(C.verses[h] ? h : 'home'); });
 
   /* ---------- region explorer ---------- */
   var R = C.regions, regionKey = null, focusKey = 'pray';
@@ -217,7 +218,7 @@
   $('#region-pills').addEventListener('click', function (e) { var b = e.target.closest('[data-region]'); if (b) showRegion(b.getAttribute('data-region')); });
   $('#focus-pills').addEventListener('click', function (e) { var b = e.target.closest('[data-focus]'); if (b) { focusKey = b.getAttribute('data-focus'); showFocus(); } });
 
-  var start = (location.hash || '#home').slice(1);
+  var start = (location.hash || '#home').slice(1); start = (C.alias && C.alias[start]) || start;
   render(C.verses[start] ? start : 'home');
   SC_GLOBE.mountAll();
   var regionTouched = false;

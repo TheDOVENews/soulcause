@@ -106,11 +106,11 @@
         if (window.SC_GLOBE) SC_GLOBE.mountAll(el);
       } },
 
-    { mood: 'drive', theme: 'day', t: 13, tone: 'Upbeat, energetic, inviting. Punch each name: SEND, LABOR, REACH, NET, FIELD.',
-      say: 'SoulCause walks with you. SEND your first twelve. LABOR with the seventy. REACH the nations. Cast the NET. Work the FIELD.',
+    { mood: 'drive', theme: 'day', t: 13, tone: 'Upbeat, energetic, inviting. Punch each name: SEND, OBEDIENCE, UNREACHED, LABOR.',
+      say: 'SoulCause walks with you. SEND your first twelve. Walk in OBEDIENCE. Reach the UNREACHED. LABOR two by two.',
       build: function (el, A) {
-        var T = [['SEND', '#1F4FD8', '#fff', 'The 12 · Matthew 10', 'Equip your first team to go.'], ['LABOR', '#F2711C', '#0B0B0C', 'The 70 · Luke 10', 'Train laborers, two by two.'], ['REACH', '#1E9E5A', '#0B0B0C', 'The world · Acts 1:8', 'Networks carrying the Commission.'], ['NET', '#B9A6F0', '#0B0B0C', 'Services · Luke 5:4', 'Prayer, counsel and coaching.'], ['FIELD', '#F5C518', '#0B0B0C', 'The app · John 4:35', 'Every conversation, in your pocket.']];
-        var at = [2.2, 3.9, 5.6, 7.1, 8.4];
+        var T = [['SEND', '#1F4FD8', '#fff', 'S · Matthew 10', 'Send your first twelve.'], ['OBEDIENCE', '#B9A6F0', '#0B0B0C', 'O · Matthew 28:20', 'NET services and the FIELD app.'], ['UNREACHED', '#1E9E5A', '#0B0B0C', 'U · Romans 15:20', 'Networks reaching the nations.'], ['LABOR', '#F2711C', '#0B0B0C', 'L · Luke 10:2', 'Train the seventy, two by two.']];
+        var at = [2.2, 3.9, 5.8, 7.6];
         el.innerHTML = '<div class="center" style="gap:16px"><h2 class="a up" ' + D(0.3) + ' style="font-size:clamp(26px,4vw,44px)">Soul<span style="font-weight:500">Cause</span> walks with you</h2><div class="tiles">' + T.map(function (t, k) { return '<div class="tile a slam" ' + D(at[k]) + ' style="background:' + t[1] + ';color:' + t[2] + '"><h3>' + t[0] + '</h3><span class="mono">' + t[3] + '</span><p>' + t[4] + '</p></div>'; }).join('') + '</div></div>';
         at.forEach(function (t) { A.at(t, function () { A.sfx('whoosh'); }); A.at(t + 0.2, function () { A.sfx('pop'); }); });
       } },

@@ -116,7 +116,7 @@ button,a.btn{font-family:inherit;cursor:pointer}
 .count small{display:block;font-size:.2em;letter-spacing:.14em;color:currentColor;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;margin-top:6px}
 
 /* tiles */
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;width:min(96vw,1100px);padding:0 10px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:min(96vw,1100px);padding:0 10px}
 .tile{border:2px solid var(--ink);border-radius:14px;padding:18px 14px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
 .tile h3{font-size:clamp(24px,3vw,36px)}
 .tile .mono{font-size:10.5px}
