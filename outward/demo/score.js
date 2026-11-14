@@ -129,5 +129,6 @@
     [[1, 1], [2.76, 0.4], [5.4, 0.18]].forEach(function (p) { self.tone('sine', f * p[0], t, 0.004, v * p[1], 0.02, 2.2, dest || self.music, 0.7); });
   };
 
+  Score.MOODS = MOODS;
   window.SCScore = Score;
 })();
