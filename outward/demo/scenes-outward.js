@@ -81,5 +81,6 @@
       } }
   ];
 
-  CineDemo({ scenes: scenes });
+  window.SC_SCENES_OUTWARD = scenes;
+  if (!window.CINE_NO_AUTO) CineDemo({ scenes: scenes });
 })();

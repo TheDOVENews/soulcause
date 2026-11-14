@@ -215,3 +215,13 @@ legend{font-weight:600;font-size:14px;margin-bottom:8px}
 .founder-photo{flex:0 0 min(320px,100%);align-self:flex-start;margin:0;display:flex;flex-direction:column;gap:8px}
 .founder-photo img{width:100%;height:auto;aspect-ratio:592/740;object-fit:cover;border:var(--line);border-radius:18px;display:block}
 .founder-photo figcaption{font-size:11px}
+
+.soul-acro{max-width:none}
+.soul-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.soul-card{border:var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;background:#fff}
+.soul-card .bar{display:block;width:44px;height:6px;border-radius:4px}
+.soul-card h3{font-size:clamp(22px,2.4vw,30px)}
+.soul-card p{margin:0;flex:1}
+.soul-card .btn{align-self:flex-start;text-decoration:none}
+@media (max-width:900px){.soul-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.soul-grid{grid-template-columns:1fr}.soul-card .btn{align-self:stretch;justify-content:center}}

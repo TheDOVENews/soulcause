@@ -7,14 +7,20 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   window.CineDemo = function (cfg) {
-    var scenes = cfg.scenes, score = new SCScore();
+    var scenes = cfg.scenes, score = new SCScore(), R = !!cfg.render, total = 0, sceneStart = 0;
+    if (R) { // render mode: log the score instead of playing it, so audio can be rendered offline in sync
+      window.__cineLog = [];
+      var log = function (e) { e.t = +(sceneStart + elapsed).toFixed(3); window.__cineLog.push(e); };
+      score = { init: function () {}, resume: function () {}, pause: function () {}, duck: function () {}, mute: function () {},
+        setMood: function (m) { log({ type: 'mood', name: m }); }, sfx: function (n, a) { log({ type: 'sfx', name: n, arg: a }); }, now: function () { return 0; } };
+    }
     var root = $('#cine'), stage = $('#stage'), cap = $('#cap'), verse = $('#verse'), bar = $('#bar i'), gate = $('#gate');
     var i = -1, elapsed = 0, dur = 0, playing = false, events = [], last = 0, audio = null, voiceOn = false, voices = [], muted = false, finished = false;
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // --- sOWL Voice ---
     var status = $('#voice-status');
-    fetch('/api/voice', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : { ready: false }; }).catch(function () { return { ready: false }; }).then(function (s) {
+    (R ? Promise.resolve({ ok: false }) : fetch('/api/voice', { credentials: 'same-origin' })).then(function (r) { return r.ok ? r.json() : { ready: false }; }).catch(function () { return { ready: false }; }).then(function (s) {
       voiceOn = !!s.ready;
       if (status) status.textContent = voiceOn ? 'Narration: sOWL Voice, powered by OpenAI' : 'Narration: on-screen captions. The sOWL Voice turns on once an OpenAI key is added in Vercel.';
       if (voiceOn) scenes.forEach(function (sc, k) { voices[k] = sc.say ? fetchVoice(sc) : Promise.resolve(null); });
@@ -39,6 +45,7 @@
     function show(k) {
       if (k < 0 || k >= scenes.length) return;
       if (audio) { audio.pause(); audio = null; }
+      if (R && i >= 0 && k === i + 1) sceneStart += elapsed; else if (R) sceneStart = 0;
       i = k; elapsed = 0; events = []; finished = false;
       var sc = scenes[k];
       root.className = 'theme-' + (sc.theme || 'night') + (playing ? '' : ' paused');
@@ -75,7 +82,8 @@
         elapsed += dt;
         events = events.filter(function (e) { if (e.t <= elapsed) { try { e.fn(); } catch (x) { console.error(x); } return false; } return true; });
         bar.style.width = (100 * ((i + Math.min(1, elapsed / dur)) / scenes.length)).toFixed(2) + '%';
-        if (elapsed >= dur) { if (i < scenes.length - 1) show(i + 1); else { finished = true; score.setMood('finale'); } }
+        if (elapsed >= dur) { if (i < scenes.length - 1) show(i + 1); else { finished = true; if (R) { window.__cineEnd = +(sceneStart + elapsed).toFixed(3); window.__cineDone = true; } else score.setMood('finale'); } }
+        if (R) window.__cineTime = sceneStart + elapsed;
       }
       requestAnimationFrame(loop);
     }
@@ -108,6 +116,7 @@
     });
     document.addEventListener('visibilitychange', function () { if (document.hidden && playing) pause(); });
 
+    if (R) setTimeout(function () { $('#begin').click(); }, 50);
     $('#begin').onclick = function () {
       score.init(); score.resume(); gate.hidden = true; root.hidden = false; playing = true;
       if (reduce) root.classList.add('reduce');

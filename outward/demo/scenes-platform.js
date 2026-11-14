@@ -137,5 +137,6 @@
       } }
   ];
 
-  CineDemo({ scenes: scenes });
+  window.SC_SCENES_PLATFORM = scenes;
+  if (!window.CINE_NO_AUTO) CineDemo({ scenes: scenes });
 })();

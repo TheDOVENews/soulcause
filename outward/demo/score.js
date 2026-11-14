@@ -12,9 +12,9 @@
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
 
   function Score() { this.ctx = null; this.mood = null; this.on = true; }
-  Score.prototype.init = function () {
+  Score.prototype.init = function (offlineCtx) {
     if (this.ctx) return;
-    var C = this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var C = this.ctx = offlineCtx || new (window.AudioContext || window.webkitAudioContext)();
     var comp = C.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4; comp.connect(C.destination);
     this.master = C.createGain(); this.master.gain.value = 0.85; this.master.connect(comp);
     this.music = C.createGain(); this.music.gain.value = 0.55; this.music.connect(this.master);
@@ -27,7 +27,7 @@
     for (var j = 0; j < nd.length; j++) nd[j] = Math.random() * 2 - 1;
     this.noiseBuf = nb;
     this.step = 0; this.next = C.currentTime + 0.1;
-    var self = this; this.timer = setInterval(function () { self.sched(); }, 25);
+    var self = this; if (!offlineCtx) this.timer = setInterval(function () { self.sched(); }, 25);
   };
   Score.prototype.now = function () { return this.ctx ? this.ctx.currentTime : 0; };
   Score.prototype.pause = function () { if (this.ctx) this.ctx.suspend(); };
@@ -105,7 +105,7 @@
   // sound effects (t = seconds from now)
   Score.prototype.sfx = function (name, arg) {
     if (!this.ctx || !this.on) return;
-    var t = this.now() + 0.01, self = this;
+    var t = (this.atTime != null ? this.atTime : this.now() + 0.01), self = this;
     var F = {
       boom: function () { var o = self.ctx.createOscillator(), g = self.ctx.createGain(); o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(28, t + 1.4); o.connect(g); g.connect(self.fx); var s = self.ctx.createGain(); s.gain.value = 0.4; g.connect(s); s.connect(self.rev); self.env(g, t, 0.005, 1, 0.05, 1.6); o.start(t); o.stop(t + 1.8); self.noise(t, 0.5, 'lowpass', 900, 80, 0.5, 0.004, self.fx, 0.4); },
       hit: function () { F.boom(); [62, 66, 69, 74].forEach(function (n) { self.tone('sawtooth', hz(n), t, 0.005, 0.05, 0.1, 1.4, self.fx, 0.8, 3000); }); },
