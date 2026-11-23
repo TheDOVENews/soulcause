@@ -51,9 +51,11 @@
 
     GIFTS.forEach(function (name, k) {
       var r = R0 + GAP * (k + 1), mk = function (g) { return [el('path', { fill: 'none', stroke: '#0B0B0C', 'stroke-linecap': 'round' }, g), el('path', { fill: 'none', 'stroke-linecap': 'round' }, g)]; };
-      var t = el('text', { class: 'lbl3', 'text-anchor': 'middle' }, labelG); t.textContent = name;
+      var lg = el('g', { class: 'tag3' }, labelG), w = name.length * 8.4 + 22;
+      var rect = el('rect', { x: -w / 2, y: -12, width: w, height: 24, rx: 12 }, lg);
+      var t = el('text', { 'text-anchor': 'middle', y: 5 }, lg); t.textContent = name;
       rings.push({ r: r, k: k, back: mk(backG), front: mk(frontG), bow: el('path', { fill: 'none', 'stroke-width': 9, stroke: RAIN[k], 'stroke-linecap': 'round' }, bowG),
-        label: t, spin: k * 0.7, tiltX: 0.9 - k * 0.13, tiltY: -0.6 + k * 0.28, phase: k * 0.9, fade: 1 });
+        label: lg, rect: rect, text: t, spin: k * 0.7, tiltX: 0.9 - k * 0.13, tiltY: -0.6 + k * 0.28, phase: k * 0.9, fade: 1 });
     });
     coreG.innerHTML = '<circle r="' + (R0 - 12) + '" fill="url(#christ)"/>' +
       '<path d="M0 -46V58M-24 -14H24" stroke="#0B0B0C" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
@@ -136,8 +138,11 @@
         });
         if (align > .02) R.bow.setAttribute('d', back + front);
         R.bow.setAttribute('opacity', R.fade.toFixed(2));
-        var lp = pts[Math.floor(N * 0.12)]; R.label.setAttribute('x', lp[0].toFixed(1)); R.label.setAttribute('y', (lp[1] - 8).toFixed(1));
-        R.label.setAttribute('fill', align > .4 ? RAIN[k] : (k === 2 ? '#F2711C' : '#F3EAD0')); R.label.setAttribute('opacity', ((lp[2] > 0 ? .45 : 1) * R.fade).toFixed(2));
+        var lp = pts[Math.floor(N * 0.12)], lc = align > .4 ? RAIN[k] : (k === 2 ? '#F2711C' : '#0B0B0C');
+        var ls = Math.max(1, VB.w / (svg.clientWidth || VB.w) * .95);
+        R.label.setAttribute('transform', 'translate(' + lp[0].toFixed(1) + ' ' + (lp[1] - 16 * ls).toFixed(1) + ') scale(' + ls.toFixed(2) + ')');
+        R.rect.setAttribute('stroke', lc); R.text.setAttribute('fill', k === 2 && align <= .4 ? '#B4470A' : '#0B0B0C');
+        R.label.setAttribute('opacity', ((lp[2] > 0 ? .55 : 1) * R.fade).toFixed(2));
       });
       ctx.restore();
 

@@ -102,7 +102,7 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-family:'IBM 
 .abyss{position:relative;width:min(100%,460px);aspect-ratio:620/640;border-radius:28px;overflow:hidden;border:2px solid #0B0B0C;background:#FFFFFF;box-shadow:0 20px 60px rgba(0,0,0,.22)}
 .abyss canvas,.abyss svg{position:absolute;inset:0;width:100%;height:100%}
 .abyss svg{max-width:none;aspect-ratio:auto}
-.flare .lbl3{paint-order:stroke;stroke:#0B0B0C;stroke-width:3px}
+
 .meter{width:min(100%,460px);height:6px;border-radius:9px;background:#E8E4D8;overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#F5C518,#F2711C);transition:width .5s ease}
 .abyss-status{font-size:14px;text-align:center;max-width:460px;min-height:2.6em;margin:0}
@@ -111,3 +111,11 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-family:'IBM 
 .switches button.ev{background:#F2711C;border-color:#F2711C;color:#0B0B0C}
 .switches button[aria-pressed="false"]{background:#fff;color:#999;border-color:#ccc;text-decoration:line-through}
 .linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer;letter-spacing:inherit;text-transform:inherit}
+
+/* readable ring names: white pills with ink text */
+.flare .tag3 rect{fill:#FFFFFF;stroke-width:2}
+.flare .tag3 text{font:700 13px Inter,system-ui,sans-serif;letter-spacing:.02em}
+.flare figcaption{font:500 13px/1.5 Inter,system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#444;max-width:460px}
+.abyss-status{font-size:16px;line-height:1.45;color:#0B0B0C;font-weight:500}
+.switches button{font-size:14px;padding:9px 14px;min-height:40px}
+@media (max-width:560px){.abyss-status{font-size:15px}}
