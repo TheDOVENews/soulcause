@@ -1,5 +1,5 @@
 /* Outward — Evangelist Danny DuVall.
- * 1) The flare in 3D: a very thin cross at the center while fire rains from above; five rings of the
+ * 1) The flare in 3D: a very thin cross at the center; light from the rings overcomes the darkness; five rings of the
  *    five-fold ministry (Ephesians 4:11) tumble in 3D, align into a rainbow, and drip outward to every corner of the earth.
  * 2) Five-fold list highlights its ring.  3) Scroll reveal + timeline progress.  4) Church application form. */
 (function () {
@@ -12,12 +12,13 @@
    * When the rings come into perfect alignment they light up as a rainbow (Genesis 9:13).
    * Drops fall outward and downward from every ring to every corner of the earth; where they land in the darkness,
    * a hole opens and the light shines through (truth revealed).
-   * At the center: a very thin cross. Fire rains from above, burns where it lands, and fades. */
+   * At the center: a very thin cross. Light rays and circles of light from every ring pierce the darkness;
+   * the longer the scene is on screen, the more the light wins, until all is light (John 1:5). */
   var svg = document.querySelector('#flare svg'), rings = [];
   if (svg) {
     var GIFTS = ['Apostles', 'Prophets', 'Evangelists', 'Pastors', 'Teachers'];
     var RAIN = ['#E53935', '#F5A21C', '#1E9E5A', '#1F4FD8', '#8E5BD8'];
-    var BASE = ['#E9E2CC', '#E9E2CC', '#F2711C', '#E9E2CC', '#E9E2CC'];
+    var BASE = ['#E9E2CC', '#E9E2CC', '#F2711C', '#E9E2CC', '#E9E2CC'], INK = ['#0B0B0C', '#0B0B0C', '#F2711C', '#0B0B0C', '#0B0B0C'];
     var R0 = 78, GAP = 30, N = 120, FOV = 900;
     var defs = el('defs', {}, svg);
     var gg = el('radialGradient', { id: 'glow' }, defs);
@@ -28,7 +29,7 @@
 
     // Light beneath, darkness above. Where the drops land, holes open and the light shines through.
     var lg = el('radialGradient', { id: 'truth', cx: '0', cy: '0', r: '420', gradientUnits: 'userSpaceOnUse' }, defs);
-    el('stop', { offset: '0', 'stop-color': '#FFFDF2' }, lg); el('stop', { offset: '.5', 'stop-color': '#FFF0B8' }, lg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, lg);
+    el('stop', { offset: '0', 'stop-color': '#FFFFFF' }, lg); el('stop', { offset: '.75', 'stop-color': '#FFFFFF' }, lg); el('stop', { offset: '1', 'stop-color': '#FFFBEA' }, lg);
     var hg = el('radialGradient', { id: 'hole' }, defs);
     el('stop', { offset: '0', 'stop-color': '#000' }, hg); el('stop', { offset: '.55', 'stop-color': '#000', 'stop-opacity': '.85' }, hg); el('stop', { offset: '1', 'stop-color': '#000', 'stop-opacity': '0' }, hg);
     var mask = el('mask', { id: 'void', maskUnits: 'userSpaceOnUse', x: -400, y: -400, width: 800, height: 840 }, defs);
@@ -36,9 +37,11 @@
     var centerHole = el('circle', { r: 110, fill: 'url(#hole)' }, mask);
     var holeG = el('g', {}, mask), holes = [];
     el('rect', { x: -400, y: -400, width: 800, height: 840, fill: 'url(#truth)' }, svg);
-    el('rect', { x: -400, y: -400, width: 800, height: 840, fill: '#070709', mask: 'url(#void)' }, svg);
+    var darkRect = el('rect', { x: -400, y: -400, width: 800, height: 840, fill: '#070709', mask: 'url(#void)' }, svg);
+    var dawn = 0, onScreen = true;   // 0 = darkness, 1 = all light (John 1:5)
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; }).observe(svg);
     function openHole(x, y, k) {
-      if (holes.length > 55) { var old = holes.shift(); old.c.remove(); }
+      if (holes.length > 90) { var old = holes.shift(); old.c.remove(); }
       holes.push({ x: x, y: y, r: 0, max: 9 + Math.random() * 12 + (k === 2 ? 5 : 0), t: 0, c: el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: 0, fill: 'url(#hole)' }, holeG) });
     }
     var glow = el('circle', { r: 170, fill: 'url(#glow)' }, svg);
@@ -50,7 +53,7 @@
     var globeLines = [];
     for (var la = -60; la <= 60; la += 30) globeLines.push({ lat: la });
     for (var lo = 0; lo < 180; lo += 30) globeLines.push({ lon: lo });
-    globeLines.forEach(function (g) { g.p = el('path', { fill: 'none', stroke: '#E9E2CC', 'stroke-width': '.8' }, globeG); });
+    globeLines.forEach(function (g) { g.p = el('path', { fill: 'none', 'stroke-width': '.8' }, globeG); });
 
     GIFTS.forEach(function (name, k) {
       var r = R0 + GAP * (k + 1);
@@ -71,38 +74,22 @@
     el('stop', { offset: '0', 'stop-color': '#F2711C' }, fg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, fg);
     coreG.innerHTML = '<circle r="' + (R0 - 10) + '" fill="url(#christ)" opacity=".55"/>' +
       '<path d="M0 -46V58M-24 -14H24" stroke="#5A4A1A" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
-    var fireG = el('g', {}, svg);                               // rain of fire falls over the whole scene
-    var fires = [];
-    function flamePath(x, y, h, w, sway) {                     // a single tongue of flame, base at (x, y)
-      return 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + 'C' + (x - w).toFixed(1) + ' ' + (y - h * .3).toFixed(1) + ' ' + (x - w * .3 + sway).toFixed(1) + ' ' + (y - h * .7).toFixed(1) + ' ' + (x + sway * 1.4).toFixed(1) + ' ' + (y - h).toFixed(1) +
-        'C' + (x + w * .3 + sway).toFixed(1) + ' ' + (y - h * .7).toFixed(1) + ' ' + (x + w).toFixed(1) + ' ' + (y - h * .3).toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + 'Z';
+    // Light rays: from every ring, light shoots outward in all directions and pierces the darkness
+    var rayLG = el('g', {}, svg), lights = [];
+    function spawnLight(pt, k) {
+      var len = Math.hypot(pt[0], pt[1]) || 1, a = Math.atan2(pt[1], pt[0]) + (Math.random() - .5) * .9;
+      lights.push({ x: pt[0], y: pt[1], dx: Math.cos(a), dy: Math.sin(a), max: 70 + Math.random() * 120, t: 0, k: k,
+        l: el('line', { 'stroke-linecap': 'round' }, rayLG) });
     }
-    function spawnFire() {
-      var f = { x: -290 + Math.random() * 580, y: -320, v: 120 + Math.random() * 90, g: 270 + Math.random() * 55, t: 0, burn: -1, s: 1.1 + Math.random() * .8,
-        p: el('path', { fill: 'url(#fire)', 'fill-opacity': '.55', stroke: '#F2711C', 'stroke-width': '1.3', 'stroke-linejoin': 'round' }, fireG),
-        q: el('path', { fill: 'none', stroke: '#F5C518', 'stroke-width': '.9' }, fireG) };
-      fires.push(f);
-    }
-    function drawFire(dt) {
-      if (!reduce && Math.random() < dt * 3.2) spawnFire();
-      fires = fires.filter(function (f) {
-        f.t += dt;
-        if (f.burn < 0) {                                       // falling: a slim drop of fire, tail streaming upward
-          f.v += 60 * dt; f.y += f.v * dt;
-          var sw = Math.sin(f.t * 9 + f.x) * 1.2;
-          f.p.setAttribute('d', flamePath(f.x, f.y, 16 * f.s, 3.2 * f.s, sw)); f.q.setAttribute('d', '');
-          f.p.setAttribute('opacity', '1');
-          if (f.y >= f.g) { f.burn = 0; f.y = f.g; openHole(f.x, f.y - 6, 2); }
-        } else {                                                // on the ground: it burns, flickers, then fades
-          f.burn += dt;
-          var life = 2.2, k = f.burn / life, rise = Math.min(1, f.burn / .25), o = k < .55 ? 1 : Math.max(0, 1 - (k - .55) / .45);
-          var h = (20 + 9 * Math.sin(f.burn * 14 + f.x)) * f.s * rise * (1 - k * .6), sw = Math.sin(f.burn * 11 + f.x) * 2.5;
-          f.p.setAttribute('d', flamePath(f.x, f.y, h, 5 * f.s, sw));
-          f.q.setAttribute('d', flamePath(f.x - 5 * f.s, f.y, h * .6, 3 * f.s, -sw * .7) + flamePath(f.x + 5 * f.s, f.y, h * .55, 3 * f.s, sw * .6));
-          f.p.setAttribute('opacity', o.toFixed(2)); f.q.setAttribute('opacity', (o * .9).toFixed(2));
-          if (k >= 1) { f.p.remove(); f.q.remove(); return false; }
-        }
-        return true;
+    function drawLights(dt) {
+      lights = lights.filter(function (r) {
+        r.t += dt; var grow = Math.min(1, r.t / .7), len = r.max * grow, o = r.t < .7 ? 1 : Math.max(0, 1 - (r.t - .7) / .8);
+        var x2 = r.x + r.dx * len, y2 = r.y + r.dy * len, x1 = r.x + r.dx * len * .35, y1 = r.y + r.dy * len * .35;
+        r.l.setAttribute('x1', x1.toFixed(1)); r.l.setAttribute('y1', y1.toFixed(1)); r.l.setAttribute('x2', x2.toFixed(1)); r.l.setAttribute('y2', y2.toFixed(1));
+        r.l.setAttribute('stroke', dawn > .55 ? '#F5A21C' : '#FFF4C9'); r.l.setAttribute('stroke-width', (r.k === 2 ? 2.2 : 1.4));
+        r.l.setAttribute('opacity', (o * .9).toFixed(2));
+        if (grow >= 1 && !r.lit) { r.lit = 1; openHole(x2, y2, r.k); }
+        if (o <= 0) { r.l.remove(); return false; } return true;
       });
     }
 
@@ -125,7 +112,10 @@
 
     function frame(ts) {
       var dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; T += dt;
-      drawFire(dt);
+      drawLights(dt);
+      if (onScreen && !document.hidden) dawn = Math.min(1, dawn + dt / 90);
+      darkRect.setAttribute('opacity', (1 - dawn).toFixed(3));
+      labelG.style.setProperty('--halo', dawn > .55 ? '#FFFFFF' : '#070709');
       if (!dragging) { yaw += vYaw * dt; vYaw += (0.12 - vYaw) * Math.min(1, dt * 0.8); pitch += vPitch * dt; vPitch *= Math.max(0, 1 - dt * 1.2); }
       // alignment cycle: rings drift apart and come together every ~14 s
       var cyc = (Math.cos(T * Math.PI * 2 / 14) + 1) / 2;          // 1 = apart, 0 = aligned
@@ -135,6 +125,7 @@
 
       // the earth wireframe
       var RG = 270;
+      globeG.setAttribute('stroke', dawn > .55 ? '#0B0B0C' : '#E9E2CC');
       globeLines.forEach(function (g) {
         var d = '', vis = '';
         for (var i = 0; i <= 48; i++) {
@@ -156,7 +147,7 @@
           var isBack = v[2] > 0, s = v[0].toFixed(1) + ' ' + v[1].toFixed(1);
           if (isBack) { back += (pb === i - 1 ? 'L' : 'M') + s; pb = i; } else { front += (pf === i - 1 ? 'L' : 'M') + s; pf = i; }
         }
-        var col = align > .4 ? RAIN[k] : BASE[k], width = (k === 2 ? 2.8 : 1.6) + align * 2.4 + (hl === k ? 1.6 : 0);
+        var col = align > .4 ? RAIN[k] : (dawn > .55 ? INK[k] : BASE[k]), width = (k === 2 ? 2.8 : 1.6) + align * 2.4 + (hl === k ? 1.6 : 0);
         R.back.setAttribute('d', back); R.back.setAttribute('stroke', col); R.back.setAttribute('stroke-width', width * .8); R.back.setAttribute('opacity', '.45');
         R.front.setAttribute('d', front); R.front.setAttribute('stroke', col); R.front.setAttribute('stroke-width', width);
         if (align > .02) R.bow.setAttribute('d', back + front);
@@ -165,20 +156,19 @@
         R.label.setAttribute('fill', col); R.label.setAttribute('opacity', lp[2] > 0 ? '.35' : '1');
         // drops: every ring drips outward and downward
         if (!reduce && Math.random() < dt * (k === 2 ? 5 : 2.2)) spawnDrop(R, pts[Math.floor(Math.random() * N)]);
+        if (!reduce && Math.random() < dt * (k === 2 ? 4 : 2.4)) spawnLight(pts[Math.floor(Math.random() * N)], k);
       });
 
-      holes.forEach(function (h) { h.t += dt; h.r += (h.max - h.r) * Math.min(1, dt * 3); var o = h.t > 4 ? Math.max(0, 1 - (h.t - 4) / 3) : 1; h.c.setAttribute('r', h.r.toFixed(1)); h.c.setAttribute('opacity', o.toFixed(2)); });
-      holes = holes.filter(function (h) { if (h.t > 7) { h.c.remove(); return false; } return true; });
+      holes.forEach(function (h) { h.t += dt; h.r += (h.max - h.r) * Math.min(1, dt * 3); var o = h.t > 9 ? Math.max(0, 1 - (h.t - 9) / 5) : 1; h.c.setAttribute('r', h.r.toFixed(1)); h.c.setAttribute('opacity', o.toFixed(2)); });
+      holes = holes.filter(function (h) { if (h.t > 14) { h.c.remove(); return false; } return true; });
       centerHole.setAttribute('r', (105 + 10 * Math.sin(T * 1.3) + align * 70).toFixed(1));
       drops = drops.filter(function (d) {
         d.life += dt;
         if (!d.land) d.land = 0.9 + Math.random() * 1.3;
         if (d.life > d.land) { openHole(d.x, d.y, d.k); d.c.remove(); return false; } d.vy += 140 * dt; d.x += d.vx * dt; d.y += d.vy * dt;
-        var o = Math.max(0, 1 - d.life / 2.6), sz = 2.2 + d.life * .6, col = align > .4 ? RAIN[d.k] : (d.k === 2 ? '#F2711C' : '#1F4FD8');
-        // teardrop pointing along its fall
-        var ang = Math.atan2(d.vy, d.vx), c = Math.cos(ang), s = Math.sin(ang);
-        var tx = d.x - c * sz * 2.6, ty = d.y - s * sz * 2.6;
-        d.c.setAttribute('d', 'M' + tx.toFixed(1) + ' ' + ty.toFixed(1) + 'Q' + (d.x - s * sz).toFixed(1) + ' ' + (d.y + c * sz).toFixed(1) + ' ' + (d.x + c * sz).toFixed(1) + ' ' + (d.y + s * sz).toFixed(1) + 'Q' + (d.x + s * sz).toFixed(1) + ' ' + (d.y - c * sz).toFixed(1) + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1));
+        var o = Math.max(0, 1 - d.life / 2.6), sz = 2.2 + d.life * .6, col = align > .4 ? RAIN[d.k] : (d.k === 2 ? '#F5A21C' : (dawn > .55 ? '#1F4FD8' : '#FFF4C9'));
+        // a small circle of light
+        d.c.setAttribute('d', 'M' + (d.x - sz).toFixed(1) + ' ' + d.y.toFixed(1) + 'a' + sz.toFixed(1) + ' ' + sz.toFixed(1) + ' 0 1 0 ' + (2 * sz).toFixed(1) + ' 0a' + sz.toFixed(1) + ' ' + sz.toFixed(1) + ' 0 1 0 ' + (-2 * sz).toFixed(1) + ' 0');
         d.c.setAttribute('fill', col); d.c.setAttribute('opacity', o.toFixed(2));
         if (o <= 0 || d.y > 320) { d.c.remove(); return false; } return true;
       });
