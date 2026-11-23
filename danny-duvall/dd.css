@@ -96,5 +96,18 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-family:'IBM 
 .flare svg{cursor:grab;touch-action:none}.flare svg:active{cursor:grabbing}
 .flare .lbl3{font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
 
-.flare svg{border-radius:28px;overflow:hidden;background:#fff;border:2px solid #0B0B0C;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+
 .flare .lbl3{paint-order:stroke;stroke:var(--halo,#070709);stroke-width:3px}
+
+.abyss{position:relative;width:min(100%,460px);aspect-ratio:620/640;border-radius:28px;overflow:hidden;border:2px solid #0B0B0C;background:#FFFFFF;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.abyss canvas,.abyss svg{position:absolute;inset:0;width:100%;height:100%}
+.abyss svg{max-width:none;aspect-ratio:auto}
+.flare .lbl3{paint-order:stroke;stroke:#0B0B0C;stroke-width:3px}
+.meter{width:min(100%,460px);height:6px;border-radius:9px;background:#E8E4D8;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#F5C518,#F2711C);transition:width .5s ease}
+.abyss-status{font-size:14px;text-align:center;max-width:460px;min-height:2.6em;margin:0}
+.switches{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:460px}
+.switches button{font:600 12px Inter,sans-serif;padding:8px 12px;border-radius:999px;border:2px solid #0B0B0C;background:#0B0B0C;color:#fff;cursor:pointer;min-height:36px}
+.switches button.ev{background:#F2711C;border-color:#F2711C;color:#0B0B0C}
+.switches button[aria-pressed="false"]{background:#fff;color:#999;border-color:#ccc;text-decoration:line-through}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer;letter-spacing:inherit;text-transform:inherit}
