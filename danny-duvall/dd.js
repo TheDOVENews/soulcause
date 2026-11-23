@@ -10,13 +10,14 @@
   /* ---------- 1. The flare, in 3D ----------
    * Five rings (Ephesians 4:11) tumble on their own axes around the center. Drag to turn the view.
    * When the rings come into perfect alignment they light up as a rainbow (Genesis 9:13).
-   * Drops fall outward and downward from every ring to every corner of the earth.
+   * Drops fall outward and downward from every ring to every corner of the earth; where they land in the darkness,
+   * a hole opens and the light shines through (truth revealed).
    * At the center: a very thin cross, and the Pentecost flame descending to rest upon it (Acts 2:3). */
   var svg = document.querySelector('#flare svg'), rings = [];
   if (svg) {
     var GIFTS = ['Apostles', 'Prophets', 'Evangelists', 'Pastors', 'Teachers'];
     var RAIN = ['#E53935', '#F5A21C', '#1E9E5A', '#1F4FD8', '#8E5BD8'];
-    var BASE = ['#0B0B0C', '#0B0B0C', '#F2711C', '#0B0B0C', '#0B0B0C'];
+    var BASE = ['#E9E2CC', '#E9E2CC', '#F2711C', '#E9E2CC', '#E9E2CC'];
     var R0 = 78, GAP = 30, N = 120, FOV = 900;
     var defs = el('defs', {}, svg);
     var gg = el('radialGradient', { id: 'glow' }, defs);
@@ -25,8 +26,23 @@
     el('stop', { offset: '0', 'stop-color': '#FFFDF2' }, gc); el('stop', { offset: '.8', 'stop-color': '#FFF3C4' }, gc); el('stop', { offset: '1', 'stop-color': '#F5C518' }, gc);
     var blur = el('filter', { id: 'soft', x: '-50%', y: '-50%', width: '200%', height: '200%' }, defs); el('feGaussianBlur', { stdDeviation: '3' }, blur);
 
+    // Light beneath, darkness above. Where the drops land, holes open and the light shines through.
+    var lg = el('radialGradient', { id: 'truth', cx: '0', cy: '0', r: '420', gradientUnits: 'userSpaceOnUse' }, defs);
+    el('stop', { offset: '0', 'stop-color': '#FFFDF2' }, lg); el('stop', { offset: '.5', 'stop-color': '#FFF0B8' }, lg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, lg);
+    var hg = el('radialGradient', { id: 'hole' }, defs);
+    el('stop', { offset: '0', 'stop-color': '#000' }, hg); el('stop', { offset: '.55', 'stop-color': '#000', 'stop-opacity': '.85' }, hg); el('stop', { offset: '1', 'stop-color': '#000', 'stop-opacity': '0' }, hg);
+    var mask = el('mask', { id: 'void', maskUnits: 'userSpaceOnUse', x: -400, y: -400, width: 800, height: 840 }, defs);
+    el('rect', { x: -400, y: -400, width: 800, height: 840, fill: '#fff' }, mask);
+    var centerHole = el('circle', { r: 110, fill: 'url(#hole)' }, mask);
+    var holeG = el('g', {}, mask), holes = [];
+    el('rect', { x: -400, y: -400, width: 800, height: 840, fill: 'url(#truth)' }, svg);
+    el('rect', { x: -400, y: -400, width: 800, height: 840, fill: '#070709', mask: 'url(#void)' }, svg);
+    function openHole(x, y, k) {
+      if (holes.length > 55) { var old = holes.shift(); old.c.remove(); }
+      holes.push({ x: x, y: y, r: 0, max: 9 + Math.random() * 12 + (k === 2 ? 5 : 0), t: 0, c: el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: 0, fill: 'url(#hole)' }, holeG) });
+    }
     var glow = el('circle', { r: 170, fill: 'url(#glow)' }, svg);
-    var globeG = el('g', { opacity: '.22' }, svg);        // the earth: a faint wireframe sphere
+    var globeG = el('g', { opacity: '.18' }, svg);        // the earth: a faint wireframe sphere
     var backG = el('g', {}, svg), dropG = el('g', {}, svg), coreG = el('g', {}, svg), frontG = el('g', {}, svg), labelG = el('g', {}, svg);
     var bowG = el('g', { opacity: '0', filter: 'url(#soft)' }); svg.insertBefore(bowG, coreG);  // rainbow halo when aligned (behind the cross)
 
@@ -34,7 +50,7 @@
     var globeLines = [];
     for (var la = -60; la <= 60; la += 30) globeLines.push({ lat: la });
     for (var lo = 0; lo < 180; lo += 30) globeLines.push({ lon: lo });
-    globeLines.forEach(function (g) { g.p = el('path', { fill: 'none', stroke: '#0B0B0C', 'stroke-width': '.8' }, globeG); });
+    globeLines.forEach(function (g) { g.p = el('path', { fill: 'none', stroke: '#E9E2CC', 'stroke-width': '.8' }, globeG); });
 
     GIFTS.forEach(function (name, k) {
       var r = R0 + GAP * (k + 1);
@@ -54,7 +70,7 @@
     var fg = el('linearGradient', { id: 'fire', x1: '0', y1: '1', x2: '0', y2: '0' }, defs);
     el('stop', { offset: '0', 'stop-color': '#F2711C' }, fg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, fg);
     coreG.innerHTML = '<circle r="' + (R0 - 10) + '" fill="url(#christ)" opacity=".55"/>' +
-      '<path d="M0 -46V58M-24 -14H24" stroke="#0B0B0C" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
+      '<path d="M0 -46V58M-24 -14H24" stroke="#5A4A1A" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
     var cross = coreG.lastChild;
     var flameG = el('g', {}, coreG), tongues = [];
     [[0, 1, 0], [-9, .62, -1], [9, .62, 1]].forEach(function (t) {
@@ -74,12 +90,12 @@
       });
       flameG.setAttribute('opacity', o.toFixed(2));
       var pressed = ease >= 1 ? 1 : 0;                              // when the flame rests, the cross is lit
-      cross.setAttribute('stroke', pressed ? '#C77A00' : '#0B0B0C');
+      cross.setAttribute('stroke', pressed ? '#C77A00' : '#5A4A1A');
       cross.setAttribute('stroke-width', (1.3 + pressed * .5 * o).toFixed(2));
     }
 
     // view rotation (drag) and ring motion
-    var yaw = 0.4, pitch = -0.35, vYaw = 0.12, dragging = false, lx = 0, ly = 0, T = 0, last = 0, hl = 2;
+    var yaw = 0.4, pitch = -0.35, vYaw = 0.12, vPitch = 0, dragging = false, lx = 0, ly = 0, T = 0, last = 0, hl = 2;
     function rot(p, ax, ay, az) {   // rotate point by X, then Y, then Z
       var x = p[0], y = p[1], z = p[2], c, s, t;
       c = Math.cos(ax); s = Math.sin(ax); t = y * c - z * s; z = y * s + z * c; y = t;
@@ -98,7 +114,7 @@
     function frame(ts) {
       var dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; T += dt;
       drawFlame();
-      if (!dragging) { yaw += vYaw * dt; vYaw += (0.12 - vYaw) * Math.min(1, dt * 0.8); }
+      if (!dragging) { yaw += vYaw * dt; vYaw += (0.12 - vYaw) * Math.min(1, dt * 0.8); pitch += vPitch * dt; vPitch *= Math.max(0, 1 - dt * 1.2); }
       // alignment cycle: rings drift apart and come together every ~14 s
       var cyc = (Math.cos(T * Math.PI * 2 / 14) + 1) / 2;          // 1 = apart, 0 = aligned
       var align = Math.pow(1 - cyc, 6);                              // sharp peak when aligned
@@ -139,8 +155,13 @@
         if (!reduce && Math.random() < dt * (k === 2 ? 5 : 2.2)) spawnDrop(R, pts[Math.floor(Math.random() * N)]);
       });
 
+      holes.forEach(function (h) { h.t += dt; h.r += (h.max - h.r) * Math.min(1, dt * 3); var o = h.t > 4 ? Math.max(0, 1 - (h.t - 4) / 3) : 1; h.c.setAttribute('r', h.r.toFixed(1)); h.c.setAttribute('opacity', o.toFixed(2)); });
+      holes = holes.filter(function (h) { if (h.t > 7) { h.c.remove(); return false; } return true; });
+      centerHole.setAttribute('r', (105 + 10 * Math.sin(T * 1.3) + align * 70).toFixed(1));
       drops = drops.filter(function (d) {
-        d.life += dt; d.vy += 140 * dt; d.x += d.vx * dt; d.y += d.vy * dt;
+        d.life += dt;
+        if (!d.land) d.land = 0.9 + Math.random() * 1.3;
+        if (d.life > d.land) { openHole(d.x, d.y, d.k); d.c.remove(); return false; } d.vy += 140 * dt; d.x += d.vx * dt; d.y += d.vy * dt;
         var o = Math.max(0, 1 - d.life / 2.6), sz = 2.2 + d.life * .6, col = align > .4 ? RAIN[d.k] : (d.k === 2 ? '#F2711C' : '#1F4FD8');
         // teardrop pointing along its fall
         var ang = Math.atan2(d.vy, d.vx), c = Math.cos(ang), s = Math.sin(ang);
@@ -153,11 +174,11 @@
     }
     if (reduce) { frame(16); } else requestAnimationFrame(frame);
 
-    // drag to turn (mouse anywhere on it; on touch, sideways drags turn and vertical drags scroll the page)
+    // drag to turn it any direction: up, down, left, right and every angle in between
     svg.addEventListener('pointerdown', function (e) { dragging = true; lx = e.clientX; ly = e.clientY; svg.setPointerCapture(e.pointerId); });
     svg.addEventListener('pointermove', function (e) {
       if (!dragging) return; var dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
-      yaw += dx * 0.01; vYaw = dx * 0.6; if (e.pointerType !== 'touch') pitch = Math.max(-1.3, Math.min(1.3, pitch + dy * 0.01));
+      yaw += dx * 0.01; vYaw = dx * 0.6; pitch += dy * 0.01; vPitch = dy * 0.6;
       if (reduce) frame(performance.now());
     });
     ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (n) { svg.addEventListener(n, function () { dragging = false; }); });
