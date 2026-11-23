@@ -92,3 +92,6 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-family:'IBM 
 .timeline{position:relative}
 .timeline .prog{position:absolute;left:-4px;top:0;width:4px;background:var(--orange);height:0;transition:height .2s linear}
 @media (prefers-reduced-motion:reduce){.o-ring::after{animation:none}.rv{opacity:1;transform:none;transition:none}}
+
+.flare svg{cursor:grab;touch-action:pan-y}.flare svg:active{cursor:grabbing}
+.flare .lbl3{font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
