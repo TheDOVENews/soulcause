@@ -1,5 +1,5 @@
 /* Outward — Evangelist Danny DuVall.
- * 1) The flare in 3D: a very thin cross at the center with the Pentecost flame descending upon it; five rings of the
+ * 1) The flare in 3D: a very thin cross at the center while fire rains from above; five rings of the
  *    five-fold ministry (Ephesians 4:11) tumble in 3D, align into a rainbow, and drip outward to every corner of the earth.
  * 2) Five-fold list highlights its ring.  3) Scroll reveal + timeline progress.  4) Church application form. */
 (function () {
@@ -12,7 +12,7 @@
    * When the rings come into perfect alignment they light up as a rainbow (Genesis 9:13).
    * Drops fall outward and downward from every ring to every corner of the earth; where they land in the darkness,
    * a hole opens and the light shines through (truth revealed).
-   * At the center: a very thin cross, and the Pentecost flame descending to rest upon it (Acts 2:3). */
+   * At the center: a very thin cross. Fire rains from above, burns where it lands, and fades. */
   var svg = document.querySelector('#flare svg'), rings = [];
   if (svg) {
     var GIFTS = ['Apostles', 'Prophets', 'Evangelists', 'Pastors', 'Teachers'];
@@ -66,32 +66,44 @@
       for (var j = 0; j < 8; j++) rings[k].beads.push(el('circle', { r: 2.4 }, frontG));
     });
 
-    // Center: a very thin cross; the Pentecost flame descends from above and rests upon it (Acts 2:3)
+    // Center: a very thin cross
     var fg = el('linearGradient', { id: 'fire', x1: '0', y1: '1', x2: '0', y2: '0' }, defs);
     el('stop', { offset: '0', 'stop-color': '#F2711C' }, fg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, fg);
     coreG.innerHTML = '<circle r="' + (R0 - 10) + '" fill="url(#christ)" opacity=".55"/>' +
       '<path d="M0 -46V58M-24 -14H24" stroke="#5A4A1A" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
-    var cross = coreG.lastChild;
-    var flameG = el('g', {}, coreG), tongues = [];
-    [[0, 1, 0], [-9, .62, -1], [9, .62, 1]].forEach(function (t) {
-      tongues.push({ dx: t[0], h: t[1], side: t[2], p: el('path', { fill: 'url(#fire)', 'fill-opacity': '.12', stroke: 'url(#fire)', 'stroke-width': '1.2', 'stroke-linejoin': 'round' }, flameG) });
-    });
-    function tongue(cx, base, h, w, sway) {
-      return 'M' + cx + ' ' + base + 'C' + (cx - w) + ' ' + (base - h * .3) + ' ' + (cx - w * .35 + sway) + ' ' + (base - h * .72) + ' ' + (cx + sway * 1.5) + ' ' + (base - h) +
-        'C' + (cx + w * .35 + sway) + ' ' + (base - h * .72) + ' ' + (cx + w) + ' ' + (base - h * .3) + ' ' + cx + ' ' + base + 'Z';
+    var fireG = el('g', {}, svg);                               // rain of fire falls over the whole scene
+    var fires = [];
+    function flamePath(x, y, h, w, sway) {                     // a single tongue of flame, base at (x, y)
+      return 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + 'C' + (x - w).toFixed(1) + ' ' + (y - h * .3).toFixed(1) + ' ' + (x - w * .3 + sway).toFixed(1) + ' ' + (y - h * .7).toFixed(1) + ' ' + (x + sway * 1.4).toFixed(1) + ' ' + (y - h).toFixed(1) +
+        'C' + (x + w * .3 + sway).toFixed(1) + ' ' + (y - h * .7).toFixed(1) + ' ' + (x + w).toFixed(1) + ' ' + (y - h * .3).toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + 'Z';
     }
-    function drawFlame() {
-      var cyc = 9, t = T % cyc, fall = Math.min(1, t / 1.8), ease = 1 - Math.pow(1 - fall, 3);
-      var y = -230 + ease * 180;                                   // descends from above, rests on the top of the cross
-      var o = Math.min(1, t / .6) * (t > cyc - .8 ? (cyc - t) / .8 : 1);
-      tongues.forEach(function (g, i) {
-        var sway = Math.sin(T * 5 + i * 2) * 2.2 + g.side * (1 - ease) * 6, h = 44 * g.h * (1 + .08 * Math.sin(T * 7 + i));
-        g.p.setAttribute('d', tongue(+(g.dx * (.4 + .6 * ease)).toFixed(1), +y.toFixed(1), +h.toFixed(1), (g.side ? 6 : 9), +sway.toFixed(2)));
+    function spawnFire() {
+      var f = { x: -290 + Math.random() * 580, y: -320, v: 120 + Math.random() * 90, g: 270 + Math.random() * 55, t: 0, burn: -1, s: 1.1 + Math.random() * .8,
+        p: el('path', { fill: 'url(#fire)', 'fill-opacity': '.55', stroke: '#F2711C', 'stroke-width': '1.3', 'stroke-linejoin': 'round' }, fireG),
+        q: el('path', { fill: 'none', stroke: '#F5C518', 'stroke-width': '.9' }, fireG) };
+      fires.push(f);
+    }
+    function drawFire(dt) {
+      if (!reduce && Math.random() < dt * 3.2) spawnFire();
+      fires = fires.filter(function (f) {
+        f.t += dt;
+        if (f.burn < 0) {                                       // falling: a slim drop of fire, tail streaming upward
+          f.v += 60 * dt; f.y += f.v * dt;
+          var sw = Math.sin(f.t * 9 + f.x) * 1.2;
+          f.p.setAttribute('d', flamePath(f.x, f.y, 16 * f.s, 3.2 * f.s, sw)); f.q.setAttribute('d', '');
+          f.p.setAttribute('opacity', '1');
+          if (f.y >= f.g) { f.burn = 0; f.y = f.g; openHole(f.x, f.y - 6, 2); }
+        } else {                                                // on the ground: it burns, flickers, then fades
+          f.burn += dt;
+          var life = 2.2, k = f.burn / life, rise = Math.min(1, f.burn / .25), o = k < .55 ? 1 : Math.max(0, 1 - (k - .55) / .45);
+          var h = (20 + 9 * Math.sin(f.burn * 14 + f.x)) * f.s * rise * (1 - k * .6), sw = Math.sin(f.burn * 11 + f.x) * 2.5;
+          f.p.setAttribute('d', flamePath(f.x, f.y, h, 5 * f.s, sw));
+          f.q.setAttribute('d', flamePath(f.x - 5 * f.s, f.y, h * .6, 3 * f.s, -sw * .7) + flamePath(f.x + 5 * f.s, f.y, h * .55, 3 * f.s, sw * .6));
+          f.p.setAttribute('opacity', o.toFixed(2)); f.q.setAttribute('opacity', (o * .9).toFixed(2));
+          if (k >= 1) { f.p.remove(); f.q.remove(); return false; }
+        }
+        return true;
       });
-      flameG.setAttribute('opacity', o.toFixed(2));
-      var pressed = ease >= 1 ? 1 : 0;                              // when the flame rests, the cross is lit
-      cross.setAttribute('stroke', pressed ? '#C77A00' : '#5A4A1A');
-      cross.setAttribute('stroke-width', (1.3 + pressed * .5 * o).toFixed(2));
     }
 
     // view rotation (drag) and ring motion
@@ -113,7 +125,7 @@
 
     function frame(ts) {
       var dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; T += dt;
-      drawFlame();
+      drawFire(dt);
       if (!dragging) { yaw += vYaw * dt; vYaw += (0.12 - vYaw) * Math.min(1, dt * 0.8); pitch += vPitch * dt; vPitch *= Math.max(0, 1 - dt * 1.2); }
       // alignment cycle: rings drift apart and come together every ~14 s
       var cyc = (Math.cos(T * Math.PI * 2 / 14) + 1) / 2;          // 1 = apart, 0 = aligned
