@@ -10,8 +10,8 @@
   /* ---------- 1. The rings and the abyss ----------
    * A thin cross at the center. Five rings of the five-fold ministry (Ephesians 4:11) turn in 3D.
    * Wherever a ring touches the darkness, the abyss turns to light, and it stays light (John 1:5).
-   * Turn the rings any direction to bring light to more of the dark. All five are needed:
-   * take one away and the darkness slowly returns, because the saints are not reached as they should be.
+   * Each ring lights its own band; turn the rings any direction to paint more of the dark. All five are needed:
+   * take one away and its band stays a void, because the saints cannot be fully edified without every gift.
    * When the rings align they shine as a rainbow (Genesis 9:13). */
   var fig = document.getElementById('flare'), svg = fig && fig.querySelector('svg'), rings = [];
   if (svg) {
@@ -82,7 +82,7 @@
       var missing = GIFTS.filter(function (g, k) { return !on[k]; });
       if (meter) meter.style.width = (lit * 100).toFixed(0) + '%';
       status.textContent = missing.length
-        ? 'Without ' + missing.join(' and ') + ', the saints are not reached as they should be, and the darkness returns.'
+        ? 'Without ' + missing.join(' and ') + ', a void remains. The saints cannot be fully edified. All five gifts are needed.'
         : lit > .985 ? 'All is light. Every ring at work, and the saints are reached.'
         : spread > 0 ? 'The light is reaching every corner…' : 'All five rings at work: ' + Math.round(lit * 100) + '% of the darkness is light. Turn the rings to reach more.';
     }
@@ -107,11 +107,10 @@
 
       var allOn = on.every(Boolean);
       ctx.save(); ctx.setTransform(scale, 0, 0, scale, -VB.x * scale, -VB.y * scale);
-      if (!allOn && onScreen) { ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = 'rgba(7,7,9,' + (0.22 * dt).toFixed(4) + ')'; ctx.fillRect(VB.x, VB.y, VB.w, VB.h); }
       ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       // once the rings have reached all they can touch, the light spreads to every corner
-      if (allOn && discLit > .96) spread = Math.min(480, Math.max(spread, 230) + 70 * dt); else if (!allOn) spread = 0;
-      if (spread > 0) { var gr = ctx.createRadialGradient(0, 0, spread * .7, 0, 0, spread); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gr; ctx.fillRect(VB.x, VB.y, VB.w, VB.h); }
+      if (on[4] && discLit > .96) spread = Math.min(480, Math.max(spread, 230) + 70 * dt); else if (!on[4]) spread = 0;
+      if (spread > 0) { ctx.save(); ctx.beginPath(); ctx.arc(0, 0, 2000, 0, Math.PI * 2); ctx.arc(0, 0, R0 + GAP * 4 + 2, 0, Math.PI * 2, true); ctx.clip('evenodd'); var gr = ctx.createRadialGradient(0, 0, spread * .7, 0, 0, spread); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gr; ctx.fillRect(VB.x, VB.y, VB.w, VB.h); ctx.restore(); }
 
       rings.forEach(function (R, k) {
         R.fade += ((on[k] ? 1 : 0) - R.fade) * Math.min(1, dt * 4);
@@ -123,8 +122,13 @@
           var s = v[0].toFixed(1) + ' ' + v[1].toFixed(1); all += (i ? 'L' : 'M') + s;
           if (v[2] > 0) { back += (pb === i - 1 ? 'L' : 'M') + s; pb = i; } else { front += (pf === i - 1 ? 'L' : 'M') + s; pf = i; }
         }
-        // the ring touches the abyss and turns it to light
+        // the ring touches the abyss and turns its own band to light, permanently.
+        // A missing ring leaves its band as a void: the saints cannot be fully edified.
+        var zin = k === 0 ? 0 : R0 + GAP * k + 2, zout = k === 4 ? 2000 : R0 + GAP * (k + 1) + 2;
+        ctx.save(); ctx.beginPath(); ctx.arc(0, 0, zout, 0, Math.PI * 2); if (zin) ctx.arc(0, 0, zin, 0, Math.PI * 2, true); ctx.clip('evenodd');
         if (on[k] && onScreen) { ctx.lineWidth = k === 2 ? 22 : 16; ctx.stroke(new Path2D(all)); }
+        else if (!on[k]) { ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = 'rgba(7,7,9,' + Math.min(1, 3 * dt).toFixed(3) + ')'; ctx.fillRect(VB.x, VB.y, VB.w, VB.h); ctx.globalCompositeOperation = 'destination-out'; }
+        ctx.restore();
         var col = align > .4 ? RAIN[k] : (k === 2 ? '#F2711C' : '#F3EAD0'), w = (k === 2 ? 2.8 : 1.8) + align * 2.4 + (hl === k ? 1.6 : 0);
         [[R.back, back, .45], [R.front, front, 1]].forEach(function (x) {
           x[0][0].setAttribute('d', x[1]); x[0][0].setAttribute('stroke-width', (w + 2.4).toFixed(2)); x[0][0].setAttribute('opacity', (x[2] * .55 * R.fade).toFixed(2));

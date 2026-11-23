@@ -39,6 +39,15 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/danny-duvall/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
     }
   ],
   "redirects": [
