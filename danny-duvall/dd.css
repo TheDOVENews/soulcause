@@ -27,7 +27,7 @@ p{margin:0}a{color:inherit}
 .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 22px;border:var(--line);border-radius:999px;font-weight:700;text-decoration:none;background:transparent;color:inherit;font-size:16px;cursor:pointer;font-family:inherit}
 .btn.solid{background:var(--sun);border-color:var(--ink);color:var(--ink)}.btn:hover{transform:translateY(-1px)}
-.arrows svg{width:100%;max-width:380px;display:block;margin:auto;overflow:visible}
+
 .arrows .core{fill:var(--sun);stroke:var(--ink);stroke-width:3}
 .arrows .rays path{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;stroke-dashoffset:120;animation:ray 1.4s ease forwards}
 .arrows .rays path:nth-child(even){stroke:var(--orange);animation-delay:.35s}
@@ -66,3 +66,29 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-family:'IBM 
 .foot{padding:28px 0}.foot .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px}
 @media (max-width:900px){.hero-grid,.two{grid-template-columns:1fr}.arrows svg{max-width:240px}.grid3{grid-template-columns:1fr 1fr}.timeline li{grid-template-columns:1fr;gap:4px}.five{grid-template-columns:repeat(5,1fr)}.five li{font-size:11px;padding:10px 2px}}
 @media (max-width:560px){.grid3,.pair{grid-template-columns:1fr}.nav a{font-size:13px;padding:8px 7px}.btn{width:100%}.mark small{display:none}}
+
+/* The flare: Christ at the center, five rings, saints edified */
+.flare{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.flare svg{width:min(100%,460px);aspect-ratio:1;overflow:visible;display:block}
+.flare figcaption{font-size:10.5px;text-align:center;color:#666}
+.flare .ring{fill:none;stroke:#0B0B0C;stroke-width:1.6}
+.flare .ring.ev{stroke:#F2711C;stroke-width:3}
+.flare .ring.hl{stroke:#F2711C;stroke-width:4}
+.flare .lbl{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;fill:#0B0B0C}
+.flare .lbl.ev{fill:#F2711C;font-weight:700}
+.flare .bead{fill:#0B0B0C}.flare .bead.ev{fill:#F2711C}
+.flare .ray{stroke:#F5C518;stroke-linecap:round}
+.flare .saint{fill:#1F4FD8}
+.flare .wave{fill:none;stroke:#F5C518;stroke-width:2}
+.five li{cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.five li.pick{background:#F2711C;color:#fff;transform:translateY(-6px);box-shadow:0 6px 0 var(--ink)}
+.muted{color:#666}
+/* header mark pulses outward */
+.o-ring::after{content:'';position:absolute;inset:-3px;border:2px solid var(--orange);border-radius:50%;animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.timeline{position:relative}
+.timeline .prog{position:absolute;left:-4px;top:0;width:4px;background:var(--orange);height:0;transition:height .2s linear}
+@media (prefers-reduced-motion:reduce){.o-ring::after{animation:none}.rv{opacity:1;transform:none;transition:none}}

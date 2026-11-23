@@ -39,11 +39,9 @@
         <p class="lead">Not just a great week of meetings, but a church full of confident, skilled and Spirit-empowered soul-winners.</p>
         <div class="btns"><a class="btn solid" href="#apply">Apply for your church</a><a class="btn" href="#week">See the Outward week</a></div>
       </div>
-      <figure class="arrows" aria-hidden="true">
-        <svg viewBox="0 0 320 320"><circle cx="160" cy="160" r="46" class="core"/><g class="rays">
-          <path d="M160 100V24M160 24l-14 16M160 24l14 16"/><path d="M220 160h76M296 160l-16-14M296 160l-16 14"/><path d="M160 220v76M160 296l-14-16M160 296l14-16"/><path d="M100 160H24M24 160l16-14M24 160l16 14"/>
-          <path d="M203 117l50-50M253 67h-21M253 67v21"/><path d="M203 203l50 50M253 253h-21M253 253v-21"/><path d="M117 203l-50 50M67 253h21M67 253v-21"/><path d="M117 117L67 67M67 67h21M67 67v21"/></g>
-          <path d="M160 140v40M146 154h28" class="cross"/></svg>
+      <figure class="flare" id="flare" role="img" aria-label="Christ at the center, with five rings of the five-fold ministry moving outward to edify the saints, the body of Christ">
+        <svg viewBox="-300 -300 600 600" aria-hidden="true"></svg>
+        <figcaption class="mono">Christ at the center · the five-fold ministry · the saints edified</figcaption>
       </figure>
     </div>
   </section>
@@ -74,7 +72,8 @@
         <p class="prose">God gave the church five gifts so the saints could be equipped. Outward restores the one most churches are missing.</p></div>
       <div class="stack">
         <blockquote class="kjv">“And he gave some, apostles; and some, prophets; and some, evangelists; and some, pastors and teachers; for the perfecting of the saints, for the work of the ministry, for the edifying of the body of Christ.” <cite>Ephesians 4:11–12 (KJV)</cite></blockquote>
-        <ol class="five"><li>Apostles</li><li>Prophets</li><li class="on">Evangelists</li><li>Pastors</li><li>Teachers</li></ol>
+        <ol class="five" id="five"><li data-ring="0" tabindex="0">Apostles</li><li data-ring="1" tabindex="0">Prophets</li><li class="on" data-ring="2" tabindex="0">Evangelists</li><li data-ring="3" tabindex="0">Pastors</li><li data-ring="4" tabindex="0">Teachers</li></ol>
+        <p class="small muted" id="five-note">Tap a gift to see its ring. The evangelist ring carries the gospel outward.</p>
       </div>
     </div>
   </section>
