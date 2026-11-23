@@ -1,5 +1,5 @@
 /* Outward — Evangelist Danny DuVall.
- * 1) The flare in 3D: the crowned Lamb, the tree and the burning bush at the center; five rings of the
+ * 1) The flare in 3D: a very thin cross at the center with the Pentecost flame descending upon it; five rings of the
  *    five-fold ministry (Ephesians 4:11) tumble in 3D, align into a rainbow, and drip outward to every corner of the earth.
  * 2) Five-fold list highlights its ring.  3) Scroll reveal + timeline progress.  4) Church application form. */
 (function () {
@@ -11,7 +11,7 @@
    * Five rings (Ephesians 4:11) tumble on their own axes around the center. Drag to turn the view.
    * When the rings come into perfect alignment they light up as a rainbow (Genesis 9:13).
    * Drops fall outward and downward from every ring to every corner of the earth.
-   * At the center: the crowned Lamb by the tree, beside an original burning-bush flame (Exodus 3:2). */
+   * At the center: a very thin cross, and the Pentecost flame descending to rest upon it (Acts 2:3). */
   var svg = document.querySelector('#flare svg'), rings = [];
   if (svg) {
     var GIFTS = ['Apostles', 'Prophets', 'Evangelists', 'Pastors', 'Teachers'];
@@ -28,7 +28,7 @@
     var glow = el('circle', { r: 170, fill: 'url(#glow)' }, svg);
     var globeG = el('g', { opacity: '.22' }, svg);        // the earth: a faint wireframe sphere
     var backG = el('g', {}, svg), dropG = el('g', {}, svg), coreG = el('g', {}, svg), frontG = el('g', {}, svg), labelG = el('g', {}, svg);
-    var bowG = el('g', { opacity: '0', filter: 'url(#soft)' }); svg.insertBefore(bowG, coreG);  // rainbow halo when aligned (behind the Lamb)
+    var bowG = el('g', { opacity: '0', filter: 'url(#soft)' }); svg.insertBefore(bowG, coreG);  // rainbow halo when aligned (behind the cross)
 
     // the earth: latitude and longitude lines on a sphere
     var globeLines = [];
@@ -50,30 +50,33 @@
       for (var j = 0; j < 8; j++) rings[k].beads.push(el('circle', { r: 2.4 }, frontG));
     });
 
-    // Center: thin line art of the crowned Lamb by the tree, and the burning bush flame
-    coreG.innerHTML =
-      '<circle r="' + (R0 - 4) + '" fill="url(#christ)" stroke="#0B0B0C" stroke-width="2.4"/>' +
-      '<g fill="none" stroke="#0B0B0C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
-        '<path d="M-58 40 Q0 32 58 40"/>' +                                                   // ground
-        // tree of life / bush
-        '<path d="M-30 40 C-32 28 -28 18 -30 6"/><path d="M-30 18 C-38 14 -44 12 -48 6"/><path d="M-30 12 C-22 8 -18 6 -14 0"/>' +
-        '<path d="M-48 6 C-56 2 -54 -8 -46 -8 C-46 -16 -36 -18 -32 -12 C-28 -18 -16 -16 -16 -8 C-8 -6 -10 4 -16 4"/>' +
-        // burning bush flame: three original tongues (orange and gold)
-        '<g stroke="#F2711C" stroke-width="1.8"><path d="M-32 -12 C-44 -24 -40 -38 -32 -52 C-30 -40 -22 -34 -24 -22 C-24 -16 -28 -14 -32 -12Z"/>' +
-        '<path d="M-40 -10 C-50 -18 -50 -28 -46 -36 C-44 -28 -38 -24 -40 -16"/><path d="M-24 -12 C-14 -20 -16 -32 -20 -40 C-20 -30 -26 -24 -24 -18"/></g>' +
-        '<path d="M-32 -20 C-36 -26 -34 -32 -32 -38 C-30 -32 -28 -28 -32 -20Z" stroke="#F5C518" stroke-width="1.4"/>' +
-        // the Lamb (facing the tree), wool in scallops
-        '<path d="M8 22 C2 22 0 14 6 12 C6 6 14 4 18 8 C22 2 32 2 34 8 C40 6 46 12 42 18 C46 22 42 28 36 26 C32 30 24 30 20 26 C16 30 8 28 8 22Z"/>' +
-        '<path d="M8 14 C2 10 -4 10 -6 14 C-8 18 -6 22 -2 22 C2 22 6 20 8 18"/>' +       // head
-        '<path d="M-2 12 C-6 8 -8 8 -9 10"/>' +                                            // ear
-        '<path d="M14 28 V40 M20 29 V40 M32 29 V40 M38 27 V40"/>' +                         // legs
-        '<path d="M44 16 C48 14 48 20 45 20"/>' +                                           // tail
-        '<circle cx="-3" cy="15" r=".9" fill="#0B0B0C"/>' +                                 // eye
-        // the crown
-        '<path d="M-8 9 L-9 1 L-5 5 L-2 -1 L1 5 L5 1 L4 9 Z" stroke="#F5A21C" stroke-width="1.6" fill="#FFF3C4"/>' +
-        '<circle cx="-2" cy="-1.5" r="1" fill="#F5A21C" stroke="none"/>' +
-      '</g>' +
-      '<text y="58" text-anchor="middle" class="lbl3" style="font-size:8.5px">Worthy is the Lamb</text>';
+    // Center: a very thin cross; the Pentecost flame descends from above and rests upon it (Acts 2:3)
+    var fg = el('linearGradient', { id: 'fire', x1: '0', y1: '1', x2: '0', y2: '0' }, defs);
+    el('stop', { offset: '0', 'stop-color': '#F2711C' }, fg); el('stop', { offset: '1', 'stop-color': '#F5C518' }, fg);
+    coreG.innerHTML = '<circle r="' + (R0 - 10) + '" fill="url(#christ)" opacity=".55"/>' +
+      '<path d="M0 -46V58M-24 -14H24" stroke="#0B0B0C" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
+    var cross = coreG.lastChild;
+    var flameG = el('g', {}, coreG), tongues = [];
+    [[0, 1, 0], [-9, .62, -1], [9, .62, 1]].forEach(function (t) {
+      tongues.push({ dx: t[0], h: t[1], side: t[2], p: el('path', { fill: 'url(#fire)', 'fill-opacity': '.12', stroke: 'url(#fire)', 'stroke-width': '1.2', 'stroke-linejoin': 'round' }, flameG) });
+    });
+    function tongue(cx, base, h, w, sway) {
+      return 'M' + cx + ' ' + base + 'C' + (cx - w) + ' ' + (base - h * .3) + ' ' + (cx - w * .35 + sway) + ' ' + (base - h * .72) + ' ' + (cx + sway * 1.5) + ' ' + (base - h) +
+        'C' + (cx + w * .35 + sway) + ' ' + (base - h * .72) + ' ' + (cx + w) + ' ' + (base - h * .3) + ' ' + cx + ' ' + base + 'Z';
+    }
+    function drawFlame() {
+      var cyc = 9, t = T % cyc, fall = Math.min(1, t / 1.8), ease = 1 - Math.pow(1 - fall, 3);
+      var y = -230 + ease * 180;                                   // descends from above, rests on the top of the cross
+      var o = Math.min(1, t / .6) * (t > cyc - .8 ? (cyc - t) / .8 : 1);
+      tongues.forEach(function (g, i) {
+        var sway = Math.sin(T * 5 + i * 2) * 2.2 + g.side * (1 - ease) * 6, h = 44 * g.h * (1 + .08 * Math.sin(T * 7 + i));
+        g.p.setAttribute('d', tongue(+(g.dx * (.4 + .6 * ease)).toFixed(1), +y.toFixed(1), +h.toFixed(1), (g.side ? 6 : 9), +sway.toFixed(2)));
+      });
+      flameG.setAttribute('opacity', o.toFixed(2));
+      var pressed = ease >= 1 ? 1 : 0;                              // when the flame rests, the cross is lit
+      cross.setAttribute('stroke', pressed ? '#C77A00' : '#0B0B0C');
+      cross.setAttribute('stroke-width', (1.3 + pressed * .5 * o).toFixed(2));
+    }
 
     // view rotation (drag) and ring motion
     var yaw = 0.4, pitch = -0.35, vYaw = 0.12, dragging = false, lx = 0, ly = 0, T = 0, last = 0, hl = 2;
@@ -94,6 +97,7 @@
 
     function frame(ts) {
       var dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; T += dt;
+      drawFlame();
       if (!dragging) { yaw += vYaw * dt; vYaw += (0.12 - vYaw) * Math.min(1, dt * 0.8); }
       // alignment cycle: rings drift apart and come together every ~14 s
       var cyc = (Math.cos(T * Math.PI * 2 / 14) + 1) / 2;          // 1 = apart, 0 = aligned
